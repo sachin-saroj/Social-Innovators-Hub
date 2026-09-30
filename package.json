@@ -1,0 +1,28 @@
+{
+  "name": "social-innovators-hub",
+  "version": "1.0.0",
+  "description": "Community-based hackathon platform for social innovation",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "keywords": [
+    "social-innovation",
+    "hackathon",
+    "community",
+    "sqlite",
+    "express"
+  ],
+  "author": "Social Innovators Hub",
+  "license": "MIT",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "better-sqlite3": "^13.0.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "jsonwebtoken": "^9.0.2",
+    "morgan": "^1.10.0"
+  }
+}

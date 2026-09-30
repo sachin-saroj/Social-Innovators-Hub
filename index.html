@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Social Innovators Hub</title>
+    <meta
+      name="description"
+      content="Social Innovators Hub connects communities, students, mentors, judges and teams to build social-impact solutions."
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <a href="#home" class="brand">🌍 Social Innovators Hub</a>
+
+      <nav class="main-nav" aria-label="Main navigation">
+        <a href="#home">Home</a>
+        <a href="#hackathons">Hackathons</a>
+        <a href="#challenges">Challenges</a>
+        <a href="#dashboard">Dashboard</a>
+        <a href="#adminReportsSection">Admin</a>
+        <a href="#contact">Contact</a>
+      </nav>
+
+      <div class="nav-actions">
+        <button id="loginBtn" class="secondary-btn small" type="button">Login</button>
+        <button id="registerBtn" class="primary-btn small" type="button">Register</button>
+        <button id="logoutBtn" class="secondary-btn small hidden" type="button">Logout</button>
+      </div>
+    </header>
+
+    <main>
+      <section id="home" class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">Community • Innovation • Impact</p>
+          <h1>Turn community problems into bold solutions.</h1>
+          <p>
+            A social innovation platform that brings together students, citizens,
+            mentors, judges and organizers to resolve real challenges through
+            meaningful hackathons and collaborative problem-solving.
+          </p>
+
+          <div class="cta-row">
+            <button id="exploreBtn" class="primary-btn" type="button">Explore Hackathons</button>
+            <button id="problemBtn" class="secondary-btn" type="button">Report a Problem</button>
+          </div>
+
+          <div class="trust-row" aria-label="Platform highlights">
+            <span>Verified issues</span>
+            <span>Mentor network</span>
+            <span>Impact tracking</span>
+          </div>
+        </div>
+
+        <div class="hero-panel">
+          <div class="metric-card">
+            <strong>1,200+</strong>
+            <span>People reached</span>
+          </div>
+          <div class="metric-card">
+            <strong>26</strong>
+            <span>Active projects</span>
+          </div>
+          <div class="metric-card">
+            <strong>9</strong>
+            <span>Community challenges</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="stats-strip">
+        <div class="stat-card">
+          <span id="statUsers">0</span>
+          <label>Users</label>
+        </div>
+        <div class="stat-card">
+          <span id="statHackathons">0</span>
+          <label>Hackathons</label>
+        </div>
+        <div class="stat-card">
+          <span id="statProblems">0</span>
+          <label>Problems</label>
+        </div>
+        <div class="stat-card">
+          <span id="statTeams">0</span>
+          <label>Teams</label>
+        </div>
+        <div class="stat-card">
+          <span id="statImpact">0</span>
+          <label>People benefited</label>
+        </div>
+      </section>
+
+      <section class="feature-showcase">
+        <div class="feature-intro">
+          <p class="eyebrow">Why communities trust us</p>
+          <h2>Built for real civic innovation.</h2>
+        </div>
+
+        <div class="feature-grid">
+          <article class="feature-card">
+            <div class="feature-icon">📍</div>
+            <h3>Local problem discovery</h3>
+            <p>Residents flag practical issues across sanitation, education, mobility, water, and public safety.</p>
+          </article>
+          <article class="feature-card">
+            <div class="feature-icon">🤝</div>
+            <h3>Cross-functional teams</h3>
+            <p>Students, citizens, mentors, and judges work together to design feasible, community-first solutions.</p>
+          </article>
+          <article class="feature-card">
+            <div class="feature-icon">📊</div>
+            <h3>Measurable impact</h3>
+            <p>Every challenge tracks reach, implementation, and social value so ideas can move from prototype to action.</p>
+          </article>
+          <article class="feature-card">
+            <div class="feature-icon">🚀</div>
+            <h3>Hackathon-ready execution</h3>
+            <p>Teams register, collaborate, submit projects, and receive structured feedback in a single platform.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="workflow-section content-section alt-bg">
+        <div class="section-header">
+          <div>
+            <p class="eyebrow">How it works</p>
+            <h2>From issue to impact</h2>
+          </div>
+        </div>
+
+        <div class="workflow-grid">
+          <div class="workflow-step">
+            <span class="step-number">01</span>
+            <h3>Identify</h3>
+            <p>People submit real challenges from their local communities and neighborhoods.</p>
+          </div>
+          <div class="workflow-step">
+            <span class="step-number">02</span>
+            <h3>Collaborate</h3>
+            <p>Students and mentors join teams, validate ideas, and propose practical solutions.</p>
+          </div>
+          <div class="workflow-step">
+            <span class="step-number">03</span>
+            <h3>Implement</h3>
+            <p>Selected ideas are turned into prototypes, submissions, and measurable social impact plans.</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="hackathons" class="content-section">
+        <div class="section-header">
+          <div>
+            <p class="eyebrow">Open programs</p>
+            <h2>Hackathons</h2>
+          </div>
+        </div>
+        <div id="hackathonList" class="card-grid"></div>
+      </section>
+
+      <section id="challenges" class="content-section alt-bg">
+        <div class="section-header">
+          <div>
+            <p class="eyebrow">Verified issues</p>
+            <h2>Community challenges</h2>
+          </div>
+        </div>
+        <div id="challengeList" class="card-grid"></div>
+      </section>
+
+      <section id="dashboard" class="content-section">
+        <div class="section-header">
+          <div>
+            <p class="eyebrow">Your workspace</p>
+            <h2>Dashboard</h2>
+          </div>
+        </div>
+        <div id="dashboardContent" class="dashboard-shell">
+          <div class="empty-state">Please log in to view your dashboard.</div>
+        </div>
+      </section>
+
+      <section id="problemSection" class="content-section">
+        <div class="section-header">
+          <div>
+            <p class="eyebrow">Community input</p>
+            <h2>Report a problem</h2>
+          </div>
+        </div>
+
+        <form id="problemForm" class="stack-form" novalidate>
+          <div class="field-grid">
+            <label>
+              Problem title
+              <input type="text" name="title" placeholder="Enter title" required />
+            </label>
+            <label>
+              Category
+              <select name="category" required>
+                <option value="">Select category</option>
+                <option>Environment</option>
+                <option>Waste Management</option>
+                <option>Water</option>
+                <option>Education</option>
+                <option>Healthcare</option>
+                <option>Transportation</option>
+                <option>Public Safety</option>
+                <option>Accessibility</option>
+                <option>Employment</option>
+                <option>Agriculture</option>
+                <option>Energy</option>
+                <option>Other</option>
+              </select>
+            </label>
+            <label>
+              City
+              <input type="text" name="city" placeholder="City" />
+            </label>
+            <label>
+              Location
+              <input type="text" name="location" placeholder="Location or neighborhood" />
+            </label>
+            <label>
+              Urgency
+              <select name="urgency" required>
+                <option value="">Select urgency</option>
+                <option>Low</option>
+                <option>Medium</option>
+                <option>High</option>
+                <option>Critical</option>
+              </select>
+            </label>
+            <label>
+              People affected
+              <input type="number" name="people_affected" min="0" value="0" />
+            </label>
+          </div>
+
+          <label>
+            Description
+            <textarea name="description" rows="5" placeholder="Describe the problem and why it matters." required></textarea>
+          </label>
+
+          <button type="submit" class="primary-btn">Submit problem</button>
+          <p id="problemMessage" class="form-message"></p>
+        </form>
+      </section>
+
+      <section id="contact" class="content-section">
+        <div class="section-header">
+          <div>
+            <p class="eyebrow">Get in touch</p>
+            <h2>Contact us</h2>
+          </div>
+        </div>
+
+        <form id="contactForm" class="stack-form narrow-form" novalidate>
+          <div class="field-grid">
+            <label>
+              Name
+              <input type="text" name="name" placeholder="Your name" required />
+            </label>
+            <label>
+              Email
+              <input type="email" name="email" placeholder="Your email" required />
+            </label>
+          </div>
+
+          <label>
+            Subject
+            <input type="text" name="subject" placeholder="Subject" />
+          </label>
+
+          <label>
+            Message
+            <textarea name="message" rows="5" placeholder="Write your message here" required></textarea>
+          </label>
+
+          <button type="submit" class="primary-btn">Send message</button>
+          <p id="contactMessage" class="form-message"></p>
+        </form>
+      </section>
+    </main>
+
+    <div id="loginModal" class="modal hidden" aria-hidden="true">
+      <div class="modal-card">
+        <button class="close-btn" type="button" data-close="loginModal">×</button>
+        <h3>Login</h3>
+        <form id="loginForm" class="stack-form" novalidate>
+          <label>
+            Email
+            <input type="email" name="email" placeholder="you@example.com" required />
+          </label>
+          <label>
+            Password
+            <input type="password" name="password" placeholder="Password" required />
+          </label>
+          <button type="submit" class="primary-btn">Login</button>
+          <button type="button" id="demoAdminLoginBtn" class="secondary-btn" style="margin-top:0.2rem;">Continue as Demo Admin</button>
+          <button type="button" id="demoCitizenLoginBtn" class="secondary-btn" style="margin-top:0.2rem;">Continue as Demo Citizen</button>
+          <p id="loginMessage" class="form-message"></p>
+        </form>
+      </div>
+    </div>
+
+    <div id="registerModal" class="modal hidden" aria-hidden="true">
+      <div class="modal-card">
+        <button class="close-btn" type="button" data-close="registerModal">×</button>
+        <h3>Create account</h3>
+        <form id="registerForm" class="stack-form" novalidate>
+          <div class="field-grid">
+            <label>
+              Full name
+              <input type="text" name="name" placeholder="Your name" required />
+            </label>
+            <label>
+              Phone
+              <input type="tel" name="phone" placeholder="Phone number" />
+            </label>
+          </div>
+
+          <label>
+            Email
+            <input type="email" name="email" placeholder="you@example.com" required />
+          </label>
+
+          <label>
+            City
+            <input type="text" name="city" placeholder="City" />
+          </label>
+
+          <label>
+            Role
+            <select name="role" required>
+              <option value="Student">Student</option>
+              <option value="Citizen">Citizen</option>
+              <option value="Community Member">Community Member</option>
+              <option value="Mentor">Mentor</option>
+              <option value="Judge">Judge</option>
+            </select>
+          </label>
+
+          <label>
+            Password
+            <input type="password" name="password" placeholder="At least 6 characters" required />
+          </label>
+
+          <button type="submit" class="primary-btn">Register</button>
+          <p id="registerMessage" class="form-message"></p>
+        </form>
+      </div>
+    </div>
+
+    <section id="adminReportsSection" class="content-section admin-panel hidden">
+      <div class="section-header">
+        <div>
+          <p class="eyebrow">Admin access</p>
+          <h2>Reports management</h2>
+        </div>
+        <button id="exportCsvBtn" class="secondary-btn small" type="button">Export CSV</button>
+      </div>
+
+      <div id="adminSummary" class="dashboard-grid"></div>
+
+      <div class="report-toolbar">
+        <input id="reportSearch" type="search" placeholder="Search report, city, category..." />
+        <select id="reportCategory">
+          <option value="All">All categories</option>
+          <option>Environment</option>
+          <option>Waste Management</option>
+          <option>Water</option>
+          <option>Education</option>
+          <option>Healthcare</option>
+          <option>Transportation</option>
+          <option>Public Safety</option>
+          <option>Accessibility</option>
+          <option>Employment</option>
+          <option>Agriculture</option>
+          <option>Energy</option>
+          <option>Other</option>
+        </select>
+        <select id="reportStatus">
+          <option value="All">All status</option>
+          <option>Pending</option>
+          <option>Approved</option>
+          <option>Rejected</option>
+        </select>
+        <select id="reportUrgency">
+          <option value="All">All urgency</option>
+          <option>Low</option>
+          <option>Medium</option>
+          <option>High</option>
+          <option>Critical</option>
+        </select>
+        <button id="applyReportFilters" class="primary-btn small" type="button">Apply filters</button>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Category</th>
+              <th>City</th>
+              <th>Urgency</th>
+              <th>Status</th>
+              <th>Submitted</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="adminReportTableBody"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <div id="toast" class="toast"></div>
+
+    <script src="script.js"></script>
+  </body>
+</html>

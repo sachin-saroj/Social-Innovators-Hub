@@ -3,6 +3,8 @@ const cors = require('cors');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const morgan = require('morgan');
+const helmet = require('helmet');
+const rateLimit = require('express-rate-limit');
 require('dotenv').config();
 
 const { db, initializeDatabase } = require('./database');
@@ -12,15 +14,45 @@ const PORT = Number(process.env.PORT || 3000);
 
 initializeDatabase();
 
+// Security headers with relaxed CSP for local static assets
+app.use(helmet({
+  contentSecurityPolicy: false,
+  crossOriginEmbedderPolicy: false,
+}));
+
 app.use(cors());
 app.use(express.json({ limit: '2mb' }));
 app.use(morgan('dev'));
 app.use(express.static(__dirname));
 
-const JWT_SECRET = process.env.JWT_SECRET || 'social-innovators-demo-secret';
+const isProduction = process.env.NODE_ENV === 'production';
+const JWT_SECRET = process.env.JWT_SECRET || (isProduction ? null : 'social-innovators-demo-secret');
+if (!JWT_SECRET) {
+  throw new Error('FATAL SECURITY CONFIGURATION: JWT_SECRET must be set in production environments.');
+}
+if (!process.env.JWT_SECRET && !isProduction) {
+  console.warn('⚠️ [DEV SECURITY NOTICE] JWT_SECRET is not configured in .env. Using fallback development secret for local college demo.');
+}
+
+const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '24h';
+const ALLOWED_REGISTRATION_ROLES = ['Student', 'Citizen', 'Community Member'];
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+// Lightweight rate limiting for authentication endpoints
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: Number(process.env.AUTH_RATE_LIMIT_MAX || 100), // 100 requests per 15 min per IP
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { message: 'Too many authentication attempts. Please try again after 15 minutes.' }
+});
 
 function signToken(user) {
-  return jwt.sign({ id: user.id, email: user.email, role: user.role }, JWT_SECRET, { expiresIn: '7d' });
+  return jwt.sign(
+    { id: user.id, email: user.email, role: user.role },
+    JWT_SECRET,
+    { expiresIn: JWT_EXPIRES_IN }
+  );
 }
 
 function requireAuth(req, res, next) {
@@ -126,118 +158,183 @@ app.get('/api/health', (req, res) => {
   res.json({ ok: true, message: 'Social Innovators Hub API is running.' });
 });
 
-app.post('/api/auth/register', (req, res) => {
-  const { name, email, password, phone, city, role } = req.body;
+app.post('/api/auth/register', authLimiter, (req, res) => {
+  try {
+    const { name, email, password, confirmPassword, phone, city, role } = req.body || {};
 
-  if (!name || !email || !password || !role) {
-    return res.status(400).json({ message: 'Name, email, password and role are required.' });
+    if (!name || !email || !password || !role) {
+      return res.status(400).json({ message: 'Name, email, password, and account role are required.' });
+    }
+
+    const trimmedName = typeof name === 'string' ? name.trim() : '';
+    if (trimmedName.length < 2 || trimmedName.length > 60) {
+      return res.status(400).json({ message: 'Full name must be between 2 and 60 characters.' });
+    }
+
+    const trimmedEmail = typeof email === 'string' ? email.trim().toLowerCase() : '';
+    if (!trimmedEmail || trimmedEmail.length > 100 || !EMAIL_REGEX.test(trimmedEmail)) {
+      return res.status(400).json({ message: 'Please provide a valid email address.' });
+    }
+
+    // STRICT ROLE ENFORCEMENT: Never allow public registration as Admin, Mentor, or Judge
+    if (!ALLOWED_REGISTRATION_ROLES.includes(role)) {
+      return res.status(400).json({
+        message: 'Invalid account role. Public registration only permits: Student, Citizen, or Community Member.'
+      });
+    }
+
+    if (typeof password !== 'string' || password.length < 8) {
+      return res.status(400).json({ message: 'Password must be at least 8 characters long.' });
+    }
+
+    if (password.length > 128) {
+      return res.status(400).json({ message: 'Password cannot exceed 128 characters.' });
+    }
+
+    if (confirmPassword !== undefined && confirmPassword !== password) {
+      return res.status(400).json({ message: 'Passwords do not match.' });
+    }
+
+    const normalizedPhone = typeof phone === 'string' ? phone.trim().slice(0, 20) : '';
+    if (normalizedPhone && !/^[0-9+\-\s()]{4,20}$/.test(normalizedPhone)) {
+      return res.status(400).json({ message: 'Please provide a valid phone number or leave it blank.' });
+    }
+
+    const normalizedCity = typeof city === 'string' ? city.trim().slice(0, 60) : '';
+
+    const existing = db.prepare('SELECT id FROM users WHERE email = ?').get(trimmedEmail);
+    if (existing) {
+      return res.status(409).json({ message: 'An account with this email already exists.' });
+    }
+
+    const passwordHash = bcrypt.hashSync(password, 10);
+    const result = db.prepare(`
+      INSERT INTO users (name, email, password_hash, phone, city, role)
+      VALUES (?, ?, ?, ?, ?, ?)
+    `).run(trimmedName, trimmedEmail, passwordHash, normalizedPhone, normalizedCity, role);
+
+    const createdUser = db.prepare('SELECT id, name, email, phone, city, role, created_at FROM users WHERE id = ?').get(result.lastInsertRowid);
+    const safe = safeUser(createdUser);
+    const token = signToken(safe);
+
+    db.prepare('INSERT INTO notifications (user_id, message) VALUES (?, ?)')
+      .run(createdUser.id, 'Welcome to Social Innovators Hub! Your account has been registered successfully.');
+
+    return res.status(201).json({
+      message: 'Registration successful.',
+      token,
+      user: safe,
+    });
+  } catch (error) {
+    console.error('[AUTH REGISTER ERROR]:', error.message);
+    return res.status(500).json({ message: 'Registration failed due to a server error. Please try again.' });
   }
-
-  const existing = db.prepare('SELECT id FROM users WHERE email = ?').get(email.trim().toLowerCase());
-  if (existing) {
-    return res.status(409).json({ message: 'An account with this email already exists.' });
-  }
-
-  if (password.length < 6) {
-    return res.status(400).json({ message: 'Password must be at least 6 characters long.' });
-  }
-
-  const passwordHash = bcrypt.hashSync(password, 10);
-  const result = db.prepare(`
-    INSERT INTO users (name, email, password_hash, phone, city, role)
-    VALUES (?, ?, ?, ?, ?, ?)
-  `).run(name.trim(), email.trim().toLowerCase(), passwordHash, phone || '', city || '', role);
-
-  const createdUser = db.prepare('SELECT id, name, email, phone, city, role FROM users WHERE id = ?').get(result.lastInsertRowid);
-  const token = signToken(createdUser);
-
-  db.prepare('INSERT INTO notifications (user_id, message) VALUES (?, ?)')
-    .run(createdUser.id, 'Welcome! Your account has been created successfully.');
-
-  res.status(201).json({
-    message: 'Registration successful.',
-    token,
-    user: createdUser,
-  });
 });
 
-app.post('/api/auth/login', (req, res) => {
-  const { email, password } = req.body;
+app.post('/api/auth/login', authLimiter, (req, res) => {
+  try {
+    const { email, password } = req.body || {};
 
-  if (!email || !password) {
-    return res.status(400).json({ message: 'Email and password are required.' });
+    if (!email || !password) {
+      return res.status(400).json({ message: 'Email and password are required.' });
+    }
+
+    const trimmedEmail = typeof email === 'string' ? email.trim().toLowerCase() : '';
+    if (!trimmedEmail || !EMAIL_REGEX.test(trimmedEmail)) {
+      // Return generic authentication failure to prevent enumeration
+      return res.status(401).json({ message: 'Invalid email or password.' });
+    }
+
+    const user = db.prepare('SELECT * FROM users WHERE email = ?').get(trimmedEmail);
+    if (!user) {
+      return res.status(401).json({ message: 'Invalid email or password.' });
+    }
+
+    const valid = bcrypt.compareSync(String(password), user.password_hash);
+    if (!valid) {
+      return res.status(401).json({ message: 'Invalid email or password.' });
+    }
+
+    const authUser = safeUser(user);
+    const token = signToken(authUser);
+
+    return res.json({
+      message: 'Login successful.',
+      token,
+      user: authUser,
+    });
+  } catch (error) {
+    console.error('[AUTH LOGIN ERROR]:', error.message);
+    return res.status(500).json({ message: 'Login failed due to a server error. Please try again.' });
   }
-
-  const user = db.prepare('SELECT * FROM users WHERE email = ?').get(email.trim().toLowerCase());
-  if (!user) {
-    return res.status(401).json({ message: 'Invalid email or password.' });
-  }
-
-  const valid = bcrypt.compareSync(password, user.password_hash);
-  if (!valid) {
-    return res.status(401).json({ message: 'Invalid email or password.' });
-  }
-
-  const authUser = safeUser(user);
-  const token = signToken(authUser);
-
-  res.json({
-    message: 'Login successful.',
-    token,
-    user: authUser,
-  });
 });
 
-app.post('/api/auth/demo-admin', (req, res) => {
-  const user = db.prepare('SELECT * FROM users WHERE email = ?').get('admin@socialhub.com');
-  if (!user) {
-    return res.status(404).json({ message: 'Demo admin account not found.' });
+app.post('/api/auth/demo-admin', authLimiter, (req, res) => {
+  try {
+    const user = db.prepare('SELECT * FROM users WHERE email = ?').get('admin@socialhub.com');
+    if (!user) {
+      return res.status(404).json({ message: 'Demo admin account not found in database.' });
+    }
+
+    if (user.role !== 'Admin') {
+      return res.status(403).json({ message: 'Demo account is not registered as an administrator.' });
+    }
+
+    const authUser = safeUser(user);
+    const token = signToken(authUser);
+
+    return res.json({
+      message: 'Demo admin login successful.',
+      token,
+      user: authUser,
+    });
+  } catch (error) {
+    console.error('[DEMO ADMIN ERROR]:', error.message);
+    return res.status(500).json({ message: 'Demo login error. Please try again.' });
   }
-
-  if (user.role !== 'Admin') {
-    return res.status(403).json({ message: 'Demo account is not registered as an admin.' });
-  }
-
-  const authUser = safeUser(user);
-  const token = signToken(authUser);
-
-  res.json({
-    message: 'Demo admin login successful.',
-    token,
-    user: authUser,
-  });
 });
 
-app.post('/api/auth/demo-citizen', (req, res) => {
-  const user = db.prepare('SELECT * FROM users WHERE email = ?').get('citizen@socialhub.com');
-  if (!user) {
-    return res.status(404).json({ message: 'Demo citizen account not found.' });
+app.post('/api/auth/demo-citizen', authLimiter, (req, res) => {
+  try {
+    const user = db.prepare('SELECT * FROM users WHERE email = ?').get('citizen@socialhub.com');
+    if (!user) {
+      return res.status(404).json({ message: 'Demo citizen account not found in database.' });
+    }
+
+    if (user.role !== 'Citizen') {
+      return res.status(403).json({ message: 'Demo account is not registered as a citizen.' });
+    }
+
+    const authUser = safeUser(user);
+    const token = signToken(authUser);
+
+    return res.json({
+      message: 'Demo citizen login successful.',
+      token,
+      user: authUser,
+    });
+  } catch (error) {
+    console.error('[DEMO CITIZEN ERROR]:', error.message);
+    return res.status(500).json({ message: 'Demo login error. Please try again.' });
   }
-
-  if (user.role !== 'Citizen') {
-    return res.status(403).json({ message: 'Demo account is not registered as a citizen.' });
-  }
-
-  const authUser = safeUser(user);
-  const token = signToken(authUser);
-
-  res.json({
-    message: 'Demo citizen login successful.',
-    token,
-    user: authUser,
-  });
 });
 
 app.get('/api/auth/me', requireAuth, (req, res) => {
-  const user = getUserById(req.user.id);
-  if (!user) {
-    return res.status(404).json({ message: 'User not found.' });
+  try {
+    const user = getUserById(req.user.id);
+    if (!user) {
+      return res.status(401).json({ message: 'User account not found or has been removed.' });
+    }
+    return res.json({ user: safeUser(user) });
+  } catch (error) {
+    console.error('[AUTH ME ERROR]:', error.message);
+    return res.status(500).json({ message: 'Failed to verify session.' });
   }
-  res.json({ user: safeUser(user) });
 });
 
 app.post('/api/auth/logout', requireAuth, (req, res) => {
-  res.json({ message: 'Logout successful.' });
+  // Stateless JWT architecture: client invalidates token in localStorage
+  return res.json({ message: 'Logout successful.' });
 });
 
 app.get('/api/problems', (req, res) => {

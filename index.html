@@ -283,71 +283,226 @@
       </section>
     </main>
 
-    <div id="loginModal" class="modal hidden" aria-hidden="true">
+    <div id="loginModal" class="modal hidden" aria-hidden="true" role="dialog" aria-labelledby="loginTitle">
       <div class="modal-card">
-        <button class="close-btn" type="button" data-close="loginModal">×</button>
-        <h3>Login</h3>
+        <button class="close-btn" type="button" data-close="loginModal" aria-label="Close login dialog">×</button>
+        <div class="modal-header">
+          <div class="modal-badge-icon">🔐</div>
+          <h3 id="loginTitle">Welcome Back</h3>
+          <p class="modal-subtitle">Sign in to your Social Innovators Hub account</p>
+        </div>
+
+        <div id="loginMessage" class="form-banner hidden" role="alert" aria-live="polite"></div>
+
         <form id="loginForm" class="stack-form" novalidate>
-          <label>
-            Email
-            <input type="email" name="email" placeholder="you@example.com" required />
-          </label>
-          <label>
-            Password
-            <input type="password" name="password" placeholder="Password" required />
-          </label>
-          <button type="submit" class="primary-btn">Login</button>
-          <button type="button" id="demoAdminLoginBtn" class="secondary-btn" style="margin-top:0.2rem;">Continue as Demo Admin</button>
-          <button type="button" id="demoCitizenLoginBtn" class="secondary-btn" style="margin-top:0.2rem;">Continue as Demo Citizen</button>
-          <p id="loginMessage" class="form-message"></p>
+          <div class="form-field-group">
+            <label for="loginEmail">Email address</label>
+            <input
+              id="loginEmail"
+              type="email"
+              name="email"
+              autocomplete="username"
+              placeholder="you@example.com"
+              required
+            />
+            <span class="field-error" id="loginEmailError" aria-live="polite"></span>
+          </div>
+
+          <div class="form-field-group">
+            <label for="loginPassword">Password</label>
+            <div class="password-input-wrap">
+              <input
+                id="loginPassword"
+                type="password"
+                name="password"
+                autocomplete="current-password"
+                placeholder="Enter your password"
+                required
+              />
+              <button
+                type="button"
+                class="password-toggle-btn"
+                data-target="loginPassword"
+                aria-label="Show password"
+                title="Toggle password visibility"
+              >👁️</button>
+            </div>
+            <span class="field-error" id="loginPasswordError" aria-live="polite"></span>
+          </div>
+
+          <button type="submit" id="loginSubmitBtn" class="primary-btn submit-btn">
+            <span class="btn-text">Sign In</span>
+            <span class="btn-spinner hidden" aria-hidden="true"></span>
+          </button>
+
+          <div class="modal-switch-prompt">
+            Don't have an account? <button type="button" class="link-btn" id="switchToRegisterBtn">Register here</button>
+          </div>
+
+          <div class="demo-divider">
+            <span>Quick College Demo Login</span>
+          </div>
+
+          <div class="demo-actions">
+            <button type="button" id="demoAdminLoginBtn" class="demo-pill-btn admin-demo" title="Instant login as Demo Administrator">
+              <span class="demo-tag">Admin</span>
+              <span>Continue as Demo Admin</span>
+            </button>
+            <button type="button" id="demoCitizenLoginBtn" class="demo-pill-btn citizen-demo" title="Instant login as Demo Citizen">
+              <span class="demo-tag">Citizen</span>
+              <span>Continue as Demo Citizen</span>
+            </button>
+          </div>
         </form>
       </div>
     </div>
 
-    <div id="registerModal" class="modal hidden" aria-hidden="true">
-      <div class="modal-card">
-        <button class="close-btn" type="button" data-close="registerModal">×</button>
-        <h3>Create account</h3>
+    <div id="registerModal" class="modal hidden" aria-hidden="true" role="dialog" aria-labelledby="registerTitle">
+      <div class="modal-card modal-card-wide">
+        <button class="close-btn" type="button" data-close="registerModal" aria-label="Close registration dialog">×</button>
+        <div class="modal-header">
+          <div class="modal-badge-icon">🌱</div>
+          <h3 id="registerTitle">Create Account</h3>
+          <p class="modal-subtitle">Join the eco-innovation community to solve local sustainability challenges</p>
+        </div>
+
+        <div id="registerMessage" class="form-banner hidden" role="alert" aria-live="polite"></div>
+
         <form id="registerForm" class="stack-form" novalidate>
           <div class="field-grid">
-            <label>
-              Full name
-              <input type="text" name="name" placeholder="Your name" required />
-            </label>
-            <label>
-              Phone
-              <input type="tel" name="phone" placeholder="Phone number" />
-            </label>
+            <div class="form-field-group">
+              <label for="regName">Full name</label>
+              <input
+                id="regName"
+                type="text"
+                name="name"
+                autocomplete="name"
+                placeholder="e.g. Priya Sharma"
+                required
+                minlength="2"
+                maxlength="60"
+              />
+              <span class="field-error" id="regNameError" aria-live="polite"></span>
+            </div>
+
+            <div class="form-field-group">
+              <label for="regPhone">Phone number <span class="optional-tag">(Optional)</span></label>
+              <input
+                id="regPhone"
+                type="tel"
+                name="phone"
+                autocomplete="tel"
+                placeholder="+91 98765 43210"
+                maxlength="20"
+              />
+              <span class="field-error" id="regPhoneError" aria-live="polite"></span>
+            </div>
           </div>
 
-          <label>
-            Email
-            <input type="email" name="email" placeholder="you@example.com" required />
-          </label>
+          <div class="field-grid">
+            <div class="form-field-group">
+              <label for="regEmail">Email address</label>
+              <input
+                id="regEmail"
+                type="email"
+                name="email"
+                autocomplete="email"
+                placeholder="you@example.com"
+                required
+                maxlength="100"
+              />
+              <span class="field-error" id="regEmailError" aria-live="polite"></span>
+            </div>
 
-          <label>
-            City
-            <input type="text" name="city" placeholder="City" />
-          </label>
+            <div class="form-field-group">
+              <label for="regCity">City <span class="optional-tag">(Optional)</span></label>
+              <input
+                id="regCity"
+                type="text"
+                name="city"
+                placeholder="e.g. Bengaluru"
+                maxlength="60"
+              />
+              <span class="field-error" id="regCityError" aria-live="polite"></span>
+            </div>
+          </div>
 
-          <label>
-            Role
-            <select name="role" required>
-              <option value="Student">Student</option>
-              <option value="Citizen">Citizen</option>
-              <option value="Community Member">Community Member</option>
-              <option value="Mentor">Mentor</option>
-              <option value="Judge">Judge</option>
+          <div class="form-field-group">
+            <label for="regRole">Account type / role</label>
+            <select name="role" id="regRole" required>
+              <option value="" disabled selected>Select your participation role</option>
+              <option value="Student">Student (Hackathon Innovator & Solution Builder)</option>
+              <option value="Citizen">Citizen (Report Local Eco & Civic Challenges)</option>
+              <option value="Community Member">Community Member (Civic Collaborator)</option>
             </select>
-          </label>
+            <span class="field-error" id="regRoleError" aria-live="polite"></span>
+          </div>
 
-          <label>
-            Password
-            <input type="password" name="password" placeholder="At least 6 characters" required />
-          </label>
+          <div class="form-field-group">
+            <label for="regPassword">Password</label>
+            <div class="password-input-wrap">
+              <input
+                id="regPassword"
+                type="password"
+                name="password"
+                autocomplete="new-password"
+                placeholder="At least 8 characters"
+                required
+                minlength="8"
+                maxlength="128"
+              />
+              <button
+                type="button"
+                class="password-toggle-btn"
+                data-target="regPassword"
+                aria-label="Show password"
+                title="Toggle password visibility"
+              >👁️</button>
+            </div>
+            <div class="password-meter-wrap" id="regPasswordMeter">
+              <div class="meter-bar-track">
+                <div class="meter-bar-fill" id="meterBarFill"></div>
+              </div>
+              <div class="meter-meta">
+                <span class="meter-label">Password strength:</span>
+                <span class="meter-text" id="meterLabelText">Enter password</span>
+              </div>
+            </div>
+            <span class="field-error" id="regPasswordError" aria-live="polite"></span>
+          </div>
 
-          <button type="submit" class="primary-btn">Register</button>
-          <p id="registerMessage" class="form-message"></p>
+          <div class="form-field-group">
+            <label for="regConfirmPassword">Confirm password</label>
+            <div class="password-input-wrap">
+              <input
+                id="regConfirmPassword"
+                type="password"
+                name="confirmPassword"
+                autocomplete="new-password"
+                placeholder="Re-enter your password"
+                required
+                minlength="8"
+                maxlength="128"
+              />
+              <button
+                type="button"
+                class="password-toggle-btn"
+                data-target="regConfirmPassword"
+                aria-label="Show password"
+                title="Toggle password visibility"
+              >👁️</button>
+            </div>
+            <span class="field-error" id="regConfirmPasswordError" aria-live="polite"></span>
+          </div>
+
+          <button type="submit" id="regSubmitBtn" class="primary-btn submit-btn">
+            <span class="btn-text">Create Account</span>
+            <span class="btn-spinner hidden" aria-hidden="true"></span>
+          </button>
+
+          <div class="modal-switch-prompt">
+            Already have an account? <button type="button" class="link-btn" id="switchToLoginBtn">Sign in here</button>
+          </div>
         </form>
       </div>
     </div>
@@ -364,8 +519,8 @@
       <div id="adminSummary" class="dashboard-grid"></div>
 
       <div class="report-toolbar">
-        <input id="reportSearch" type="search" placeholder="Search report, city, category..." />
-        <select id="reportCategory">
+        <input id="reportSearch" type="search" placeholder="Search report, city, category..." aria-label="Search reports" />
+        <select id="reportCategory" aria-label="Filter by category">
           <option value="All">All categories</option>
           <option>Environment</option>
           <option>Waste Management</option>
@@ -380,13 +535,13 @@
           <option>Energy</option>
           <option>Other</option>
         </select>
-        <select id="reportStatus">
+        <select id="reportStatus" aria-label="Filter by status">
           <option value="All">All status</option>
           <option>Pending</option>
           <option>Approved</option>
           <option>Rejected</option>
         </select>
-        <select id="reportUrgency">
+        <select id="reportUrgency" aria-label="Filter by urgency">
           <option value="All">All urgency</option>
           <option>Low</option>
           <option>Medium</option>

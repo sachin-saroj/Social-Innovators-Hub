@@ -1,87 +1,112 @@
-# Social Innovators Hub
+# 🌱 Social Innovators Hub — Environmental & Sustainability Hackathon Platform
 
-Social Innovators Hub is a community-driven hackathon and innovation platform that connects students, community members, mentors, judges and administrators. The project helps convert real-world social problems into hackathon challenges, team-based solution building and result-driven impact tracking.
+**Social Innovators Hub** is a community-driven environmental hackathon and green innovation platform designed to transform real-world ecological and community challenges into actionable, high-impact solutions. It brings together students, eco-innovators, citizens, mentors, judges, and administrators to collaborate on sustainable technology, waste management, water conservation, renewable energy, and climate resilience.
 
-## Features
+---
 
-- Community problem reporting and admin approval workflow
-- Demo admin login for immediate admin access
-- Demo citizen login for community/public access
-- Admin reports dashboard with search, filters and status actions
-- CSV export for community reports
-- Public hackathon listing and registration
-- Team creation workflows and problem-driven participation
-- Project submission flow for student teams
-- Mentor and judge dashboards
-- Notification system
-- Contact form for inquiries
-- Role-based access for students, mentors, judges and admins
-- SQLite database for persistent demo data
-- Express.js backend with JWT authentication
+## 🌍 Platform Overview & Eco-Focus
 
-## Tech stack
+- **Environmental Problem Reporting:** Citizens and local communities report real ecological issues (waste accumulation, water scarcity, pollution hotspots, green cover loss).
+- **Green Hackathons:** Structured hackathons focused on Environmental Sustainability, Clean Tech, Smart Water, Renewable Energy, and Circular Economy.
+- **Student Team Collaboration:** Multi-disciplinary student teams register, form squads, and build prototype solutions targeted at verified community challenges.
+- **Mentorship & Judging:** Domain experts and sustainability judges provide feedback, evaluate feasibility, social & ecological impact, scalability, and sustainability.
+- **Impact Tracking & Admin Oversight:** Administrators review community reports, approve hackathon entries, track verified impact metrics, and export data.
 
-- Frontend: HTML, CSS, JavaScript
-- Backend: Node.js, Express.js
-- Database: SQLite with better-sqlite3
-- Authentication: JWT + bcryptjs
+---
 
-## Project structure
+## 🚀 Key Features
 
-- `index.html` – main UI
-- `style.css` – styling and layout
-- `script.js` – frontend logic and API calls
-- `server.js` – backend server
-- `database.js` – SQLite schema and seed data
-- `socialhub.db` – SQLite database file generated at runtime
-- `.env.example` – environment variables template
+- **Eco Challenge & Problem Submissions:** Citizens report local environmental problems with severity, location, and details.
+- **Admin Verification & Workflow:** Review, verify, prioritize, and approve community environmental challenges for upcoming hackathons.
+- **Hackathon Directory & Registration:** Browse live and upcoming environmental hackathons with schedules, team size rules, and guidelines.
+- **Student Team Portal & Project Submissions:** Submit project prototypes complete with problem statement, tech stack, environmental impact forecast, and demo links.
+- **Mentor & Judge Evaluation Dashboards:** Structured scoring rubrics evaluating innovation, environmental impact, technical feasibility, and sustainability.
+- **Instant Demo Access:** One-click shortcuts for Demo Admin, Citizen, Student, Mentor, and Judge roles.
+- **Admin Reports & Analytics:** Filter and search reports, track resolution statuses, and export CSV summaries.
+- **Persistent Local Database:** Backed by SQLite (`better-sqlite3`) with pre-seeded eco-hackathons, real-world problems, and demo profiles.
 
-## Installation
+---
 
-1. Open the project folder.
-2. Install dependencies:
+## 🛠️ Tech Stack
 
+- **Frontend:** Semantic HTML5, Modern Responsive CSS3, Vanilla JavaScript (ES6+)
+- **Backend:** Node.js, Express.js
+- **Database:** SQLite with `better-sqlite3`
+- **Security & Auth:** JWT (JSON Web Tokens), bcryptjs password hashing, role-based access control (RBAC)
+
+---
+
+## 📁 Project Structure
+
+```
+├── index.html           # Main user interface & application views
+├── style.css            # Stylesheets, responsive layout & visual design
+├── script.js            # Frontend logic, API interactions & state management
+├── server.js            # Express API server & authentication endpoints
+├── database.js          # SQLite schema definitions & eco-seed dataset
+├── socialhub.db         # Persistent SQLite database (generated at runtime)
+├── .env.example         # Environment configuration template
+└── package.json         # Project metadata and dependencies
+```
+
+---
+
+## ⚡ Quick Start / Installation
+
+### 1. Prerequisites
+- Node.js (v18 or higher recommended)
+- npm
+
+### 2. Clone & Setup
+```bash
+git clone https://github.com/sachin-saroj/social-innovators-hub.git
+cd social-innovators-hub
+```
+
+### 3. Install Dependencies
 ```bash
 npm install
 ```
 
-3. Create the environment file:
-
+### 4. Configure Environment
 ```bash
 cp .env.example .env
 ```
 
-4. Start the server:
-
+### 5. Launch the Server
 ```bash
 npm start
+# or for live reload during development:
+npm run dev
 ```
 
-5. Open the application in your browser:
+### 6. Open in Browser
+Visit **[http://localhost:3000](http://localhost:3000)** in your web browser.
 
-```bash
-http://localhost:3000
-```
+---
 
-## Demo accounts
+## 👤 Demo Accounts
 
-- Admin: admin@socialhub.com / admin123
-- Demo Admin shortcut: use the “Continue as Demo Admin” button in the login modal
-- Citizen: citizen@socialhub.com / citizen123
-- Demo Citizen shortcut: use the “Continue as Demo Citizen” button in the login modal
-- Student: student@socialhub.com / student123
-- Community member: community@socialhub.com / community123
-- Mentor: mentor@socialhub.com / mentor123
-- Judge: judge@socialhub.com / judge123
+| Role | Email | Password | Quick Shortcut |
+| :--- | :--- | :--- | :--- |
+| **Admin** | `admin@socialhub.com` | `admin123` | Click **"Continue as Demo Admin"** |
+| **Citizen** | `citizen@socialhub.com` | `citizen123` | Click **"Continue as Demo Citizen"** |
+| **Student** | `student@socialhub.com` | `student123` | Email / Password login |
+| **Community** | `community@socialhub.com` | `community123` | Email / Password login |
+| **Mentor** | `mentor@socialhub.com` | `mentor123` | Email / Password login |
+| **Judge** | `judge@socialhub.com` | `judge123` | Email / Password login |
 
-## Notes
+---
 
-This is a demo-ready social innovation platform intended for college project demonstration. It prioritizes a clear architecture and working functionality over excessive complexity.
+## 🌿 Future Roadmap
 
-## Future scope
+- [ ] Automated carbon footprint & ecological impact estimation tools
+- [ ] Integration with municipal open data and environmental sensors
+- [ ] Leaderboard and automated certificates for winning green innovators
+- [ ] Direct file and media upload for on-ground environmental reports
+- [ ] Sponsor and green grant funding integration
 
-- Add real team invitations and mentor assignment workflows
-- Add full admin CRUD dashboards for users and messages
-- Add evaluation scoring leaderboard and final winner publishing
-- Add impact reporting and analytics views
-- Add file uploads and document storage
+---
+
+## 📄 License
+This project is licensed under the MIT License.

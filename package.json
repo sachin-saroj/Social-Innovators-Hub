@@ -1,13 +1,17 @@
 {
   "name": "social-innovators-hub",
   "version": "1.0.0",
-  "description": "Community-based hackathon platform for social innovation",
+  "description": "Community-driven Environmental & Sustainability Hackathon platform for green innovation and eco-solutions",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
     "dev": "node --watch server.js"
   },
   "keywords": [
+    "environmental-hackathon",
+    "sustainability",
+    "green-innovation",
+    "climate-tech",
     "social-innovation",
     "hackathon",
     "community",

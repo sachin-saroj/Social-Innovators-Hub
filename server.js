@@ -1,3 +1,6 @@
+const fs = require('fs');
+const path = require('path');
+const crypto = require('crypto');
 const express = require('express');
 const cors = require('cors');
 const bcrypt = require('bcryptjs');
@@ -14,6 +17,12 @@ const PORT = Number(process.env.PORT || 3000);
 
 initializeDatabase();
 
+// Ensure persistent uploads directory for citizen problem photos
+const uploadsDir = path.join(__dirname, 'uploads');
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir, { recursive: true });
+}
+
 // Security headers with relaxed CSP for local static assets
 app.use(helmet({
   contentSecurityPolicy: false,
@@ -21,9 +30,35 @@ app.use(helmet({
 }));
 
 app.use(cors());
-app.use(express.json({ limit: '2mb' }));
+app.use(express.json({ limit: '10mb' }));
 app.use(morgan('dev'));
 app.use(express.static(__dirname));
+app.use('/uploads', express.static(uploadsDir));
+
+function saveBase64Image(dataString) {
+  if (!dataString || typeof dataString !== 'string') return null;
+  // If already a valid URL or path, keep as is
+  if (dataString.startsWith('/uploads/') || dataString.startsWith('/assets/') || dataString.startsWith('http://') || dataString.startsWith('https://')) {
+    return dataString;
+  }
+  const matches = dataString.match(/^data:image\/([a-zA-Z0-9+.-]+);base64,(.+)$/);
+  if (!matches || matches.length !== 3) {
+    return null;
+  }
+  const ext = matches[1].replace('jpeg', 'jpg').toLowerCase();
+  const allowed = ['jpg', 'png', 'webp', 'gif'];
+  if (!allowed.includes(ext)) {
+    throw new Error('Unsupported image format. Allowed formats: JPG, PNG, WEBP, GIF.');
+  }
+  const buffer = Buffer.from(matches[2], 'base64');
+  if (buffer.length > 5 * 1024 * 1024) {
+    throw new Error('Image file exceeds the 5MB maximum size limit.');
+  }
+  const safeFilename = `evidence-${Date.now()}-${crypto.randomBytes(4).toString('hex')}.${ext}`;
+  const filePath = path.join(uploadsDir, safeFilename);
+  fs.writeFileSync(filePath, buffer);
+  return `/uploads/${safeFilename}`;
+}
 
 const isProduction = process.env.NODE_ENV === 'production';
 const JWT_SECRET = process.env.JWT_SECRET || (isProduction ? null : 'social-innovators-demo-secret');
@@ -83,6 +118,7 @@ function requireRole(role) {
 }
 
 function safeUser(user) {
+  if (!user) return null;
   return {
     id: user.id,
     name: user.name,
@@ -348,29 +384,63 @@ app.get('/api/problems', (req, res) => {
   res.json(rows);
 });
 
-app.post('/api/problems', requireAuth, (req, res) => {
-  const { title, description, category, location, city, urgency, people_affected, image_url } = req.body;
-
-  if (!title || !description || !category || !urgency) {
-    return res.status(400).json({ message: 'Title, description, category and urgency are required.' });
+app.post('/api/upload', requireAuth, (req, res) => {
+  try {
+    const { image_data } = req.body || {};
+    if (!image_data) {
+      return res.status(400).json({ message: 'No image data provided.' });
+    }
+    const imageUrl = saveBase64Image(image_data);
+    if (!imageUrl) {
+      return res.status(400).json({ message: 'Invalid image format or corrupted base64 data.' });
+    }
+    res.json({ image_url: imageUrl });
+  } catch (error) {
+    res.status(400).json({ message: error.message || 'Image upload failed.' });
   }
+});
 
-  const result = db.prepare(`
-    INSERT INTO problems (title, description, category, location, city, urgency, people_affected, image_url, created_by, status)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'Pending')
-  `).run(title.trim(), description.trim(), category, location || '', city || '', urgency, Number(people_affected || 0), image_url || '', req.user.id);
+app.post('/api/problems', requireAuth, (req, res) => {
+  try {
+    const { title, description, category, location, city, urgency, people_affected, image_url, image_data } = req.body;
 
-  const problem = db.prepare(`
-    SELECT p.*, u.name AS created_by_name
-    FROM problems p
-    LEFT JOIN users u ON u.id = p.created_by
-    WHERE p.id = ?
-  `).get(result.lastInsertRowid);
+    if (!title || !description || !category || !urgency) {
+      return res.status(400).json({ message: 'Title, description, category and urgency are required.' });
+    }
 
-  db.prepare('INSERT INTO notifications (user_id, message) VALUES (?, ?)')
-    .run(req.user.id, `Your problem "${title}" has been submitted for verification.`);
+    let finalImageUrl = (image_url || '').trim();
+    if (image_data) {
+      try {
+        const savedPath = saveBase64Image(image_data);
+        if (savedPath) finalImageUrl = savedPath;
+      } catch (err) {
+        return res.status(400).json({ message: err.message });
+      }
+    }
 
-  res.status(201).json({ message: 'Problem submitted successfully.', problem });
+    const result = db.prepare(`
+      INSERT INTO problems (title, description, category, location, city, urgency, people_affected, image_url, created_by, status)
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, 'Pending')
+    `).run(title.trim(), description.trim(), category, location || '', city || '', urgency, Number(people_affected || 0), finalImageUrl, req.user.id);
+
+    const problem = db.prepare(`
+      SELECT p.*, u.name AS created_by_name
+      FROM problems p
+      LEFT JOIN users u ON u.id = p.created_by
+      WHERE p.id = ?
+    `).get(result.lastInsertRowid);
+
+    db.prepare('INSERT INTO notifications (user_id, message) VALUES (?, ?)')
+      .run(req.user.id, `Your problem "${title.trim()}" has been submitted with evidence for verification.`);
+
+    res.status(201).json({ message: 'Problem submitted successfully with evidence.', problem });
+  } catch (error) {
+    if (error.message && error.message.includes('UNIQUE constraint failed')) {
+      return res.status(409).json({ message: 'A problem report with this title already exists. Please make the title specific to your neighborhood.' });
+    }
+    console.error('[PROBLEM SUBMIT ERROR]:', error.message);
+    res.status(500).json({ message: error.message || 'Failed to submit problem.' });
+  }
 });
 
 app.put('/api/problems/:id', requireAuth, (req, res) => {
@@ -674,6 +744,165 @@ app.get('/api/dashboard/stats', (req, res) => {
   });
 });
 
+app.get('/api/dashboard/my-activity', requireAuth, (req, res) => {
+  try {
+    const userId = req.user.id;
+    const user = getUserById(userId);
+    if (!user) {
+      return res.status(401).json({ message: 'User session expired or not found. Please log in again.' });
+    }
+
+    // 1. Registered hackathons
+    const registrations = db.prepare(`
+      SELECT hr.*, h.name AS hackathon_name, h.theme, h.start_date, h.end_date, h.mode, h.location, h.status AS hackathon_status
+      FROM hackathon_registrations hr
+      JOIN hackathons h ON h.id = hr.hackathon_id
+      WHERE hr.user_id = ?
+      ORDER BY hr.created_at DESC
+    `).all(userId);
+
+    // 2. Teams (where user is leader or member)
+    const teams = db.prepare(`
+      SELECT t.*, h.name AS hackathon_name, p.title AS challenge_title, tm.role AS my_role
+      FROM teams t
+      JOIN team_members tm ON tm.team_id = t.id AND tm.user_id = ?
+      LEFT JOIN hackathons h ON h.id = t.hackathon_id
+      LEFT JOIN problems p ON p.id = t.challenge_id
+      ORDER BY t.created_at DESC
+    `).all(userId);
+
+    teams.forEach((team) => {
+      team.members = db.prepare(`
+        SELECT u.id, u.name, u.email, tm.role, tm.status
+        FROM team_members tm
+        JOIN users u ON u.id = tm.user_id
+        WHERE tm.team_id = ?
+      `).all(team.id);
+    });
+
+    // 3. Submissions
+    const memberTeamIds = teams.map((t) => t.id);
+    let submissions = [];
+    if (memberTeamIds.length > 0) {
+      const placeholders = memberTeamIds.map(() => '?').join(',');
+      submissions = db.prepare(`
+        SELECT s.*, t.name AS team_name
+        FROM submissions s
+        LEFT JOIN teams t ON t.id = s.team_id
+        WHERE s.submitted_by = ? OR s.team_id IN (${placeholders})
+        ORDER BY s.created_at DESC
+      `).all(userId, ...memberTeamIds);
+    } else {
+      submissions = db.prepare(`
+        SELECT s.*, t.name AS team_name
+        FROM submissions s
+        LEFT JOIN teams t ON t.id = s.team_id
+        WHERE s.submitted_by = ?
+        ORDER BY s.created_at DESC
+      `).all(userId);
+    }
+
+    // Attach evaluations
+    submissions.forEach((sub) => {
+      sub.evaluations = db.prepare(`
+        SELECT e.*, u.name AS judge_name
+        FROM evaluations e
+        JOIN judges j ON j.id = e.judge_id
+        JOIN users u ON u.id = j.user_id
+        WHERE e.submission_id = ?
+      `).all(sub.id);
+    });
+
+    // 4. Reported problems by this user
+    const reportedProblems = db.prepare(`
+      SELECT * FROM problems
+      WHERE created_by = ?
+      ORDER BY created_at DESC
+    `).all(userId);
+
+    // 5. Notifications
+    const notifications = db.prepare(`
+      SELECT * FROM notifications
+      WHERE user_id = ?
+      ORDER BY created_at DESC
+      LIMIT 10
+    `).all(userId);
+
+    res.json({
+      user: safeUser(user),
+      registeredHackathons: registrations,
+      teams,
+      submissions,
+      reportedProblems,
+      notifications,
+      metrics: {
+        hackathonsCount: registrations.length,
+        teamsCount: teams.length,
+        submissionsCount: submissions.length,
+        problemsCount: reportedProblems.length,
+        unreadNotifications: notifications.filter((n) => !n.read_flag).length,
+      },
+    });
+  } catch (error) {
+    console.error('[MY-ACTIVITY ERROR]:', error.message);
+    res.status(500).json({ message: 'Failed to fetch user activity.' });
+  }
+});
+
+app.post('/api/hackathons/:id/squad-register', requireAuth, (req, res) => {
+  try {
+    const hackathonId = Number(req.params.id);
+    const { team_name, challenge_id, description } = req.body || {};
+
+    if (!team_name || !team_name.trim()) {
+      return res.status(400).json({ message: 'Squad name is required.' });
+    }
+
+    const hackathon = db.prepare('SELECT * FROM hackathons WHERE id = ?').get(hackathonId);
+    if (!hackathon) {
+      return res.status(404).json({ message: 'Hackathon not found.' });
+    }
+
+    const existingReg = db.prepare('SELECT * FROM hackathon_registrations WHERE user_id = ? AND hackathon_id = ?').get(req.user.id, hackathonId);
+    if (!existingReg) {
+      db.prepare('INSERT INTO hackathon_registrations (user_id, hackathon_id, status) VALUES (?, ?, ?)')
+        .run(req.user.id, hackathonId, 'Confirmed');
+    }
+
+    const existingTeam = db.prepare('SELECT * FROM teams WHERE name = ?').get(team_name.trim());
+    if (existingTeam) {
+      return res.status(409).json({ message: 'A squad with this name already exists. Please choose a unique name.' });
+    }
+
+    const result = db.prepare(`
+      INSERT INTO teams (name, description, hackathon_id, challenge_id, team_leader_id, status)
+      VALUES (?, ?, ?, ?, ?, 'Active')
+    `).run(
+      team_name.trim(),
+      description || 'Multidisciplinary green innovation squad.',
+      hackathonId,
+      Number(challenge_id) || null,
+      req.user.id
+    );
+
+    const teamId = result.lastInsertRowid;
+    db.prepare('INSERT INTO team_members (team_id, user_id, role, status) VALUES (?, ?, ?, ?)')
+      .run(teamId, req.user.id, 'Team Leader', 'Accepted');
+
+    db.prepare('INSERT INTO notifications (user_id, message) VALUES (?, ?)')
+      .run(req.user.id, `Squad "${team_name.trim()}" registered for ${hackathon.name}!`);
+
+    const createdTeam = db.prepare('SELECT * FROM teams WHERE id = ?').get(teamId);
+    res.status(201).json({
+      message: `Squad "${team_name.trim()}" registered successfully for ${hackathon.name}!`,
+      team: createdTeam,
+    });
+  } catch (error) {
+    console.error('[SQUAD-REGISTER ERROR]:', error.message);
+    res.status(500).json({ message: error.message || 'Failed to register squad.' });
+  }
+});
+
 app.get('/api/admin/dashboard', requireAuth, requireRole('Admin'), (req, res) => {
   const stats = {
     totalUsers: db.prepare('SELECT COUNT(*) AS total FROM users').get().total,
@@ -721,58 +950,69 @@ app.get('/api/admin/reports', requireAuth, requireRole('Admin'), (req, res) => {
   });
 });
 
-app.get('/api/admin/reports/export', requireAuth, requireRole('Admin'), (req, res) => {
-  const rows = filterReportRows(getReportRows(), {
-    search: req.query.search || '',
-    category: req.query.category || 'All',
-    status: req.query.status || 'All',
-    urgency: req.query.urgency || 'All',
-    city: req.query.city || 'All',
-    date: req.query.date || 'All',
-  });
+function handleReportsCsvExport(req, res) {
+  try {
+    const rows = filterReportRows(getReportRows(), {
+      search: req.query.search || '',
+      category: req.query.category || 'All',
+      status: req.query.status || 'All',
+      urgency: req.query.urgency || 'All',
+      city: req.query.city || 'All',
+      date: req.query.date || 'All',
+    });
 
-  const headers = [
-    'ID',
-    'Problem Title',
-    'Description',
-    'Category',
-    'Location',
-    'City',
-    'Urgency',
-    'People Affected',
-    'Submitted By',
-    'Submitter Email',
-    'Status',
-    'Admin Feedback',
-    'Submitted Date',
-    'Updated Date',
-  ];
+    const headers = [
+      'ID',
+      'Problem Title',
+      'Description',
+      'Category',
+      'Location',
+      'City',
+      'Urgency',
+      'People Affected',
+      'Photo Evidence URL',
+      'Submitted By',
+      'Submitter Email',
+      'Status',
+      'Admin Feedback',
+      'Submitted Date',
+      'Updated Date',
+    ];
 
-  const csvRows = [headers.map(escapeCsv).join(',')];
+    const csvRows = [headers.map(escapeCsv).join(',')];
 
-  rows.forEach((row) => {
-    csvRows.push([
-      row.id,
-      row.title,
-      row.description,
-      row.category,
-      row.location,
-      row.city,
-      row.urgency,
-      row.people_affected,
-      row.submitted_by,
-      row.submitter_email,
-      row.status,
-      row.feedback,
-      row.created_at,
-      row.updated_at,
-    ].map(escapeCsv).join(','));
-  });
+    rows.forEach((row) => {
+      csvRows.push([
+        row.id,
+        row.title,
+        row.description,
+        row.category,
+        row.location,
+        row.city,
+        row.urgency,
+        row.people_affected,
+        row.image_url || 'N/A',
+        row.submitted_by,
+        row.submitter_email,
+        row.status,
+        row.feedback,
+        row.created_at,
+        row.updated_at,
+      ].map(escapeCsv).join(','));
+    });
 
-  res.setHeader('Content-Type', 'text/csv; charset=utf-8');
-  res.setHeader('Content-Disposition', 'attachment; filename="social-innovators-community-reports.csv"');
-  res.status(200).send(csvRows.join('\n'));
-});
+    const timestamp = new Date().toISOString().slice(0, 10);
+    res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+    res.setHeader('Content-Disposition', `attachment; filename="socialhub-community-reports-${timestamp}.csv"`);
+    res.status(200).send(csvRows.join('\n'));
+  } catch (error) {
+    console.error('[CSV EXPORT ERROR]:', error.message);
+    res.status(500).json({ message: 'Failed to generate reports CSV.' });
+  }
+}
+
+app.get('/api/admin/reports/export', requireAuth, requireRole('Admin'), handleReportsCsvExport);
+app.get('/api/admin/reports/export.csv', requireAuth, requireRole('Admin'), handleReportsCsvExport);
 
 app.put('/api/admin/reports/:id', requireAuth, requireRole('Admin'), (req, res) => {
   const id = Number(req.params.id);
@@ -819,6 +1059,9 @@ app.delete('/api/admin/reports/:id', requireAuth, requireRole('Admin'), (req, re
 });
 
 app.get('*', (req, res) => {
+  if (req.path.startsWith('/api/')) {
+    return res.status(404).json({ message: `API endpoint ${req.method} ${req.path} not found.` });
+  }
   res.sendFile(__dirname + '/index.html');
 });
 

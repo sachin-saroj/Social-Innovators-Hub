@@ -3,42 +3,72 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Social Innovators Hub</title>
+    <title>Social Innovators Hub — Grassroots Eco Innovation & Hackathons</title>
     <meta
       name="description"
-      content="Social Innovators Hub connects communities, students, mentors, judges and teams to build social-impact solutions."
+      content="Social Innovators Hub brings together students, citizens, mentors, and judges to solve environmental and sustainability challenges through community-driven hackathons."
     />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" type="image/svg+xml" href="/assets/images/logo.svg" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/logo.png" />
+    <link rel="apple-touch-icon" href="/assets/images/logo.png" />
+    <meta property="og:title" content="Social Innovators Hub — Grassroots Eco Innovation & Hackathons" />
+    <meta property="og:description" content="Turn community problems into bold green solutions through civic hackathons." />
+    <meta property="og:image" content="/assets/images/logo.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="/assets/images/logo.jpg" />
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
+    <!-- Top Navigation: Cream Canvas, 64px, Pinned -->
     <header class="site-header">
-      <a href="#home" class="brand">🌍 Social Innovators Hub</a>
+      <a href="#home" class="brand" aria-label="Social Innovators Hub Home">
+        <div class="brand-logo-container">
+          <img src="/assets/images/logo.png" alt="Social Innovators Logo" class="brand-logo-img" />
+        </div>
+        <span>Social Innovators<span class="brand-dot">.</span></span>
+      </a>
 
       <nav class="main-nav" aria-label="Main navigation">
-        <a href="#home">Home</a>
+        <a href="#home" class="active">Home</a>
         <a href="#hackathons">Hackathons</a>
         <a href="#challenges">Challenges</a>
+        <a href="#features">Platform</a>
         <a href="#dashboard">Dashboard</a>
         <a href="#adminReportsSection">Admin</a>
         <a href="#contact">Contact</a>
       </nav>
 
       <div class="nav-actions">
-        <button id="loginBtn" class="secondary-btn small" type="button">Login</button>
+        <button id="loginBtn" class="secondary-btn small" type="button">Sign In</button>
         <button id="registerBtn" class="primary-btn small" type="button">Register</button>
+        <div id="userChip" class="user-chip hidden">
+          <span id="userChipRole" class="role-tag">Student</span>
+          <span id="userChipName">User</span>
+        </div>
         <button id="logoutBtn" class="secondary-btn small hidden" type="button">Logout</button>
       </div>
     </header>
 
     <main>
+      <!-- Hero Band: 7-5 Editorial Split with 3D Claymation Illustration Artifact -->
       <section id="home" class="hero">
         <div class="hero-copy">
-          <p class="eyebrow">Community • Innovation • Impact</p>
-          <h1>Turn community problems into bold solutions.</h1>
-          <p>
-            A social innovation platform that brings together students, citizens,
-            mentors, judges and organizers to resolve real challenges through
-            meaningful hackathons and collaborative problem-solving.
+          <div class="hero-brand-pill">
+            <img src="/assets/images/logo.svg" alt="Social Innovators Emblem" class="hero-pill-icon" />
+            <span>Official Civic Climate Innovation Platform</span>
+          </div>
+          <span class="eyebrow">CLIMATE TECH • SOCIAL INNOVATION • HACKATHONS</span>
+          <h1>Turn community problems into bold green solutions.</h1>
+          <p class="lead">
+            A high-voltage social innovation platform uniting students, citizens, mentors,
+            and judges to solve grassroots environmental challenges through rapid civic
+            hackathons and measurable social impact.
           </p>
 
           <div class="cta-row">
@@ -46,33 +76,51 @@
             <button id="problemBtn" class="secondary-btn" type="button">Report a Problem</button>
           </div>
 
-          <div class="trust-row" aria-label="Platform highlights">
-            <span>Verified issues</span>
-            <span>Mentor network</span>
-            <span>Impact tracking</span>
+          <div class="trust-row" aria-label="Platform Highlights">
+            <span>Verified civic issues</span>
+            <span>Expert mentor network</span>
+            <span>Real-world carbon tracking</span>
+          </div>
+
+          <div class="hero-panel" style="width: 100%; margin-top: 24px;">
+            <div class="metric-card">
+              <strong>1,200+</strong>
+              <span>Citizens reached</span>
+            </div>
+            <div class="metric-card">
+              <strong>26</strong>
+              <span>Active eco-projects</span>
+            </div>
+            <div class="metric-card">
+              <strong>100%</strong>
+              <span>Community-verified</span>
+            </div>
           </div>
         </div>
 
-        <div class="hero-panel">
-          <div class="metric-card">
-            <strong>1,200+</strong>
-            <span>People reached</span>
+        <div class="hero-illustration-card" aria-label="3D Claymation Illustration">
+          <img
+            src="/assets/images/hero.jpg"
+            alt="Handcrafted 3D Claymation Eco-Innovation Hero with characters planting a seedling sprout"
+            width="800"
+            height="600"
+            loading="eager"
+          />
+          <div class="hero-floating-badge badge-top-left">
+            <span class="pulse-dot"></span>
+            <span>26 Active Projects Live</span>
           </div>
-          <div class="metric-card">
-            <strong>26</strong>
-            <span>Active projects</span>
-          </div>
-          <div class="metric-card">
-            <strong>9</strong>
-            <span>Community challenges</span>
+          <div class="hero-floating-badge badge-bottom-right">
+            <span>🌱 1,200+ Citizens Benefited</span>
           </div>
         </div>
       </section>
 
-      <section class="stats-strip">
+      <!-- Stats Strip: Warm Cream Ticker -->
+      <section class="stats-strip" aria-label="Key Platform Metrics">
         <div class="stat-card">
           <span id="statUsers">0</span>
-          <label>Users</label>
+          <label>Innovators</label>
         </div>
         <div class="stat-card">
           <span id="statHackathons">0</span>
@@ -80,214 +128,677 @@
         </div>
         <div class="stat-card">
           <span id="statProblems">0</span>
-          <label>Problems</label>
+          <label>Problems Flagged</label>
         </div>
         <div class="stat-card">
           <span id="statTeams">0</span>
-          <label>Teams</label>
+          <label>Collaborative Teams</label>
         </div>
         <div class="stat-card">
           <span id="statImpact">0</span>
-          <label>People benefited</label>
+          <label>People Benefited</label>
         </div>
       </section>
 
-      <section class="feature-showcase">
+      <!-- Saturated Single-Color Feature Cards: The 6-Color Clay Showcase -->
+      <section id="features" class="feature-showcase">
         <div class="feature-intro">
-          <p class="eyebrow">Why communities trust us</p>
-          <h2>Built for real civic innovation.</h2>
+          <span class="eyebrow">System Architecture</span>
+          <h2>Crafted for tangible civic innovation.</h2>
+          <p class="body-md" style="margin-top: 8px; max-width: 680px; color: var(--colors-muted);">
+            Each tool in our suite is designed to move projects smoothly from localized citizen observation
+            to deployable, hackathon-tested sustainability prototypes.
+          </p>
         </div>
 
         <div class="feature-grid">
-          <article class="feature-card">
-            <div class="feature-icon">📍</div>
-            <h3>Local problem discovery</h3>
-            <p>Residents flag practical issues across sanitation, education, mobility, water, and public safety.</p>
+          <!-- Card 1: Brand Pink (#ff4d8b) -->
+          <article class="feature-card feature-card-pink">
+            <div class="feature-card-header">
+              <span class="feature-pill-tag">Outbound Dispatch</span>
+              <h3>Civic Problem Engine</h3>
+              <p>Residents flag raw environmental issues across sanitation, water, and energy with automatic geolocation and category tagging.</p>
+            </div>
+            <div class="product-ui-fragment">
+              <div class="fragment-row">
+                <span class="label">Issue #104</span>
+                <span class="fragment-pill" style="background:#fee2e2; color:#b91c1c;">Urgent • Water Quality</span>
+              </div>
+              <div class="fragment-row">
+                <span class="label">Location</span>
+                <span class="val">Koramangala, Bengaluru</span>
+              </div>
+              <div class="fragment-row">
+                <span class="label">Verification</span>
+                <span class="val" style="color:#15803d;">✓ Field Confirmed</span>
+              </div>
+            </div>
           </article>
-          <article class="feature-card">
-            <div class="feature-icon">🤝</div>
-            <h3>Cross-functional teams</h3>
-            <p>Students, citizens, mentors, and judges work together to design feasible, community-first solutions.</p>
+
+          <!-- Card 2: Brand Teal (#1a3a3a) -->
+          <article class="feature-card feature-card-teal">
+            <div class="feature-card-header">
+              <span class="feature-pill-tag">Featured Engine</span>
+              <h3>Hackathon Squad Matcher</h3>
+              <p>Assemble interdisciplinary teams pairing computer science students with environmental researchers, IoT builders, and community leads.</p>
+            </div>
+            <div class="product-ui-fragment">
+              <div class="fragment-row">
+                <span class="label">Squad 04</span>
+                <span class="fragment-pill" style="background:#dcfce7; color:#15803d;">85% Ready</span>
+              </div>
+              <div class="fragment-row">
+                <span class="label">Team Matrix</span>
+                <span class="val">3 Developers • 1 Biologist</span>
+              </div>
+              <div class="fragment-row">
+                <span class="label">Matched Challenge</span>
+                <span class="val">Waste Segregation AI</span>
+              </div>
+            </div>
           </article>
-          <article class="feature-card">
-            <div class="feature-icon">📊</div>
-            <h3>Measurable impact</h3>
-            <p>Every challenge tracks reach, implementation, and social value so ideas can move from prototype to action.</p>
+
+          <!-- Card 3: Brand Lavender (#b8a4ed) -->
+          <article class="feature-card feature-card-lavender">
+            <div class="feature-card-header">
+              <span class="feature-pill-tag">AI Impact Engine</span>
+              <h3>Verified Impact Forecaster</h3>
+              <p>Predict carbon abatement, liters of clean water preserved, and neighborhood cost savings before deploying hardware in the wild.</p>
+            </div>
+            <div class="product-ui-fragment">
+              <div class="fragment-row">
+                <span class="label">CO2 Reduction</span>
+                <span class="val">14.8 Tons/year</span>
+              </div>
+              <div class="fragment-row">
+                <span class="label">Water Conserved</span>
+                <span class="val">92,000 L / month</span>
+              </div>
+              <div class="fragment-row">
+                <span class="label">Social ROI</span>
+                <span class="val" style="color:#15803d;">4.8x Economic Multiplier</span>
+              </div>
+            </div>
           </article>
-          <article class="feature-card">
-            <div class="feature-icon">🚀</div>
-            <h3>Hackathon-ready execution</h3>
-            <p>Teams register, collaborate, submit projects, and receive structured feedback in a single platform.</p>
+
+          <!-- Card 4: Brand Peach (#ffb084) -->
+          <article class="feature-card feature-card-peach">
+            <div class="feature-card-header">
+              <span class="feature-pill-tag">Grassroots Intake</span>
+              <h3>Citizen Voice & Geotagging</h3>
+              <p>Zero-barrier reporting for municipal and rural neighborhoods with instant photo evidence, voice memos, and neighbor endorsements.</p>
+            </div>
+            <div class="product-ui-fragment">
+              <div class="fragment-row">
+                <span class="label">Intake Protocol</span>
+                <span class="val">Mobile Audio Memo</span>
+              </div>
+              <div class="fragment-row">
+                <span class="label">GPS Coordinates</span>
+                <span class="val">12.9352° N, 77.6245° E</span>
+              </div>
+              <div class="fragment-row">
+                <span class="label">Endorsements</span>
+                <span class="val" style="color:#b45309;">48 Citizens Backed</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 5: Brand Ochre (#e8b94a) -->
+          <article class="feature-card feature-card-ochre">
+            <div class="feature-card-header">
+              <span class="feature-pill-tag">Jury Rubric</span>
+              <h3>Multi-Axis Scoring Radar</h3>
+              <p>Standardized evaluation matrix measuring technical feasibility, ecological viability, community adoption, and long-term scalability.</p>
+            </div>
+            <div class="product-ui-fragment">
+              <div class="fragment-row">
+                <span class="label">Tech Feasibility</span>
+                <span class="val">92 / 100</span>
+              </div>
+              <div class="fragment-row">
+                <span class="label">Ecol. Viability</span>
+                <span class="val">98 / 100</span>
+              </div>
+              <div class="fragment-row">
+                <span class="label">Community Adoption</span>
+                <span class="val">94 / 100</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 6: Cream Card (#f5f0e0) -->
+          <article class="feature-card feature-card-cream">
+            <div class="feature-card-header">
+              <span class="feature-pill-tag">Mentor Sprints</span>
+              <h3>Live Code & Hardware Audits</h3>
+              <p>Dedicated industry mentors guide students through embedded circuits, cloud APIs, and field deployment roadmaps during each sprint.</p>
+            </div>
+            <div class="product-ui-fragment">
+              <div class="fragment-row">
+                <span class="label">Assigned Lead</span>
+                <span class="val">Meera Nair (CleanTech Arch)</span>
+              </div>
+              <div class="fragment-row">
+                <span class="label">Sprint Sync</span>
+                <span class="val">Tomorrow, 4:00 PM</span>
+              </div>
+              <div class="fragment-row">
+                <span class="label">Code Quality Gate</span>
+                <span class="val" style="color:#15803d;">Passing 31/31 Tests</span>
+              </div>
+            </div>
           </article>
         </div>
       </section>
 
+      <!-- Workflow Section: From Issue to Impact -->
       <section class="workflow-section content-section alt-bg">
         <div class="section-header">
           <div>
-            <p class="eyebrow">How it works</p>
-            <h2>From issue to impact</h2>
+            <span class="eyebrow">Execution Pipeline</span>
+            <h2>From neighborhood issue to deployed impact.</h2>
           </div>
         </div>
 
         <div class="workflow-grid">
           <div class="workflow-step">
             <span class="step-number">01</span>
-            <h3>Identify</h3>
-            <p>People submit real challenges from their local communities and neighborhoods.</p>
+            <h3>Identify & Verify</h3>
+            <p>Citizens flag local environmental breakdowns. Admins and community validators review severity, scope, and affected population.</p>
           </div>
           <div class="workflow-step">
             <span class="step-number">02</span>
-            <h3>Collaborate</h3>
-            <p>Students and mentors join teams, validate ideas, and propose practical solutions.</p>
+            <h3>Squad Up & Build</h3>
+            <p>Students, engineers, and mentors join multidisciplinary teams, formulate technical architectures, and build working prototypes.</p>
           </div>
           <div class="workflow-step">
             <span class="step-number">03</span>
-            <h3>Implement</h3>
-            <p>Selected ideas are turned into prototypes, submissions, and measurable social impact plans.</p>
+            <h3>Deploy & Measure</h3>
+            <p>Winning solutions receive seed sponsorship, pilot testing in local neighborhoods, and real-time social impact monitoring.</p>
           </div>
         </div>
       </section>
 
+      <!-- Hackathons Section -->
       <section id="hackathons" class="content-section">
         <div class="section-header">
           <div>
-            <p class="eyebrow">Open programs</p>
-            <h2>Hackathons</h2>
+            <span class="eyebrow">Active & Upcoming</span>
+            <h2>Environmental Hackathons</h2>
           </div>
+          <span class="body-sm">Registration open for students and multidisciplinary innovators</span>
         </div>
         <div id="hackathonList" class="card-grid"></div>
       </section>
 
+      <!-- Challenges Section -->
       <section id="challenges" class="content-section alt-bg">
         <div class="section-header">
           <div>
-            <p class="eyebrow">Verified issues</p>
-            <h2>Community challenges</h2>
+            <span class="eyebrow">Verified Civic Challenges</span>
+            <h2>Grassroots Environmental Problems</h2>
           </div>
+          <span class="body-sm">Real issues submitted by citizens awaiting student innovation teams</span>
         </div>
         <div id="challengeList" class="card-grid"></div>
       </section>
 
+      <!-- Dashboard Section -->
       <section id="dashboard" class="content-section">
         <div class="section-header">
           <div>
-            <p class="eyebrow">Your workspace</p>
-            <h2>Dashboard</h2>
+            <span class="eyebrow">Your Workspace</span>
+            <h2>Innovator Dashboard</h2>
           </div>
         </div>
         <div id="dashboardContent" class="dashboard-shell">
-          <div class="empty-state">Please log in to view your dashboard.</div>
+          <div class="empty-state">Please sign in to view your personalized dashboard and registrations.</div>
         </div>
       </section>
 
-      <section id="problemSection" class="content-section">
+      <!-- Report a Problem Section -->
+      <!-- Report an Environmental Problem Section (100x Upgraded UI with Photo Evidence & Clay Design) -->
+      <section id="problemSection" class="content-section alt-bg">
         <div class="section-header">
           <div>
-            <p class="eyebrow">Community input</p>
-            <h2>Report a problem</h2>
+            <span class="eyebrow">CITIZEN ACTION & CIVIC EVIDENCE DESK</span>
+            <h2>Report a Grassroots Environmental Breakdown</h2>
           </div>
+          <span class="body-sm">Document community problems with photographic proof to guide student engineering hackathon squads</span>
         </div>
 
-        <form id="problemForm" class="stack-form" novalidate>
-          <div class="field-grid">
-            <label>
-              Problem title
-              <input type="text" name="title" placeholder="Enter title" required />
-            </label>
-            <label>
-              Category
-              <select name="category" required>
-                <option value="">Select category</option>
-                <option>Environment</option>
-                <option>Waste Management</option>
-                <option>Water</option>
-                <option>Education</option>
-                <option>Healthcare</option>
-                <option>Transportation</option>
-                <option>Public Safety</option>
-                <option>Accessibility</option>
-                <option>Employment</option>
-                <option>Agriculture</option>
-                <option>Energy</option>
-                <option>Other</option>
-              </select>
-            </label>
-            <label>
-              City
-              <input type="text" name="city" placeholder="City" />
-            </label>
-            <label>
-              Location
-              <input type="text" name="location" placeholder="Location or neighborhood" />
-            </label>
-            <label>
-              Urgency
-              <select name="urgency" required>
-                <option value="">Select urgency</option>
-                <option>Low</option>
-                <option>Medium</option>
-                <option>High</option>
-                <option>Critical</option>
-              </select>
-            </label>
-            <label>
-              People affected
-              <input type="number" name="people_affected" min="0" value="0" />
-            </label>
+        <div class="report-problem-shell">
+          <div class="report-header-banner">
+            <div class="banner-badge-icon">📸</div>
+            <div>
+              <h3>Citizen Incident & Ecological Evidence Intake</h3>
+              <p>Every report is geo-tagged, reviewed by civic validators, and translated into verified hackathon problem statements for students to solve.</p>
+            </div>
           </div>
 
-          <label>
-            Description
-            <textarea name="description" rows="5" placeholder="Describe the problem and why it matters." required></textarea>
-          </label>
+          <form id="problemForm" class="stack-form report-problem-form" novalidate>
+            <input type="hidden" id="problemImageData" name="image_data" value="" />
+            <input type="hidden" id="problemImageUrl" name="image_url" value="" />
 
-          <button type="submit" class="primary-btn">Submit problem</button>
-          <p id="problemMessage" class="form-message"></p>
-        </form>
+            <!-- Pillar 1: Issue Identification -->
+            <div class="form-pillar">
+              <div class="pillar-title">
+                <span class="pillar-step">01</span>
+                <h4>Issue Identification & Priority</h4>
+              </div>
+
+              <div class="field-grid-2col">
+                <div class="form-field-group">
+                  <label for="probTitle">Problem Title <span class="required-star">*</span></label>
+                  <input
+                    type="text"
+                    id="probTitle"
+                    name="title"
+                    placeholder="e.g. Toxic chemical froth overflowing from lake outlet canal"
+                    required
+                    minlength="5"
+                    maxlength="120"
+                  />
+                  <span class="field-hint">Be specific about what is happening and the physical hazard.</span>
+                </div>
+
+                <div class="form-field-group">
+                  <label for="probCategory">Environmental Domain / Category <span class="required-star">*</span></label>
+                  <select id="probCategory" name="category" required>
+                    <option value="" disabled selected>Select an environmental category</option>
+                    <option value="Water">💧 Water & Sewage Contamination</option>
+                    <option value="Waste Management">♻️ Waste Management & Landfills</option>
+                    <option value="Environment">🌿 Clean Air & Industrial Smog</option>
+                    <option value="Energy">⚡ Rural Clean Energy & Grid Outages</option>
+                    <option value="Agriculture">🌾 Agriculture, Stubble & Soil</option>
+                    <option value="Healthcare">🏥 Public Health & Drinking Water</option>
+                    <option value="Other">🌍 Other Ecological Breakdown</option>
+                  </select>
+                </div>
+              </div>
+
+              <!-- Urgency Selector Radio Cards -->
+              <div class="form-field-group" style="margin-top: 14px;">
+                <label>Urgency Level <span class="required-star">*</span></label>
+                <div class="urgency-cards-grid" role="radiogroup" aria-label="Urgency Level">
+                  <label class="urgency-card">
+                    <input type="radio" name="urgency" value="Low" />
+                    <div class="urgency-card-content">
+                      <span class="urgency-dot low"></span>
+                      <strong>Low</strong>
+                      <small>Gradual issue, long-term planning</small>
+                    </div>
+                  </label>
+                  <label class="urgency-card">
+                    <input type="radio" name="urgency" value="Medium" checked />
+                    <div class="urgency-card-content">
+                      <span class="urgency-dot medium"></span>
+                      <strong>Medium</strong>
+                      <small>Moderate seasonal hazard</small>
+                    </div>
+                  </label>
+                  <label class="urgency-card">
+                    <input type="radio" name="urgency" value="High" />
+                    <div class="urgency-card-content">
+                      <span class="urgency-dot high"></span>
+                      <strong>High</strong>
+                      <small>Acute health/environmental risk</small>
+                    </div>
+                  </label>
+                  <label class="urgency-card">
+                    <input type="radio" name="urgency" value="Critical" />
+                    <div class="urgency-card-content">
+                      <span class="urgency-dot critical"></span>
+                      <strong>Critical</strong>
+                      <small>Emergency community crisis</small>
+                    </div>
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <!-- Pillar 2: Location & Impact Scope -->
+            <div class="form-pillar">
+              <div class="pillar-title">
+                <span class="pillar-step">02</span>
+                <h4>Location & Community Impact Scope</h4>
+              </div>
+
+              <div class="field-grid-3col">
+                <div class="form-field-group">
+                  <label for="probCity">City / District <span class="required-star">*</span></label>
+                  <input type="text" id="probCity" name="city" placeholder="e.g. Bengaluru" required />
+                </div>
+
+                <div class="form-field-group">
+                  <label for="probLocation">Neighborhood / Ward / Landmark</label>
+                  <input type="text" id="probLocation" name="location" placeholder="e.g. Ward 150, Bellandur Lake Outlet" />
+                </div>
+
+                <div class="form-field-group">
+                  <label for="probPeopleAffected">Estimated Citizens Impacted</label>
+                  <div class="impact-input-wrap">
+                    <input type="number" id="probPeopleAffected" name="people_affected" min="0" value="5000" step="100" />
+                    <span class="impact-unit">people</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Quick impact presets -->
+              <div class="impact-presets-bar">
+                <span class="preset-label">Quick Population Presets:</span>
+                <button type="button" class="preset-chip" data-impact="500">~500 (Street)</button>
+                <button type="button" class="preset-chip active" data-impact="5000">~5,000 (Neighborhood)</button>
+                <button type="button" class="preset-chip" data-impact="25000">~25,000 (Ward)</button>
+                <button type="button" class="preset-chip" data-impact="75000">~75,000+ (Catchment)</button>
+              </div>
+            </div>
+
+            <!-- Pillar 3: Ground Photographic Evidence (Core user request) -->
+            <div class="form-pillar">
+              <div class="pillar-title">
+                <span class="pillar-step">03</span>
+                <h4>Ground Photographic Evidence</h4>
+              </div>
+              <p class="pillar-desc">Upload actual field photos showing the pollution, chemical foam, landfill smoke, or pipeline leak. Visual proof helps student squads design appropriate hardware and filters.</p>
+
+              <!-- Interactive Drag & Drop Area -->
+              <div id="photoDropzone" class="photo-dropzone" role="button" tabindex="0" aria-label="Upload photo evidence">
+                <input
+                  type="file"
+                  id="problemFileInput"
+                  accept="image/png, image/jpeg, image/webp, image/jpg"
+                  class="hidden-file-input"
+                />
+                <div class="dropzone-content">
+                  <div class="dropzone-icon">📷</div>
+                  <div class="dropzone-text">
+                    <strong>Drag and drop your incident photo here</strong>
+                    <span>or <span class="browse-link">browse files on your device</span></span>
+                  </div>
+                  <span class="dropzone-meta">Supports JPG, PNG, WEBP (up to 5MB)</span>
+                </div>
+              </div>
+
+              <!-- Live Photo Preview Box (shown after selection) -->
+              <div id="photoPreviewCard" class="photo-preview-card hidden">
+                <div class="preview-img-container">
+                  <img id="photoPreviewImg" src="" alt="Incident Preview" />
+                  <span class="preview-badge">✓ Photo Evidence Attached</span>
+                </div>
+                <div class="preview-meta">
+                  <strong id="photoPreviewName">evidence.jpg</strong>
+                  <span id="photoPreviewDimensions" class="preview-subtext">Verified Image Format</span>
+                  <div class="preview-actions">
+                    <button type="button" id="changePhotoBtn" class="secondary-btn small">Change Photo</button>
+                    <button type="button" id="removePhotoBtn" class="link-btn" style="color: var(--colors-error); font-size: 0.8125rem;">Remove</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Quick Sample Incident Photos for Testing -->
+              <div class="sample-evidence-section">
+                <span class="sample-label">💡 Test with sample community evidence:</span>
+                <div class="sample-chips-row">
+                  <button type="button" class="sample-chip" data-src="/assets/images/challenges/bellandur-lake-froth.jpg" data-name="bellandur-lake-froth.jpg">
+                    🌊 Lake Toxic Froth
+                  </button>
+                  <button type="button" class="sample-chip" data-src="/assets/images/challenges/okhla-landfill-methane.jpg" data-name="okhla-landfill-methane.jpg">
+                    🔥 Landfill Methane Smoke
+                  </button>
+                  <button type="button" class="sample-chip" data-src="/assets/images/challenges/arsenic-tube-well.jpg" data-name="arsenic-tube-well.jpg">
+                    🧪 Arsenic Contaminated Well
+                  </button>
+                  <button type="button" class="sample-chip" data-src="/assets/images/challenges/punjab-stubble-smoke.jpg" data-name="punjab-stubble-smoke.jpg">
+                    🌾 Paddy Stubble Smoke
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Pillar 4: Detailed Description & Ground Context -->
+            <div class="form-pillar">
+              <div class="pillar-title">
+                <span class="pillar-step">04</span>
+                <h4>Detailed Field Observation & Context</h4>
+              </div>
+
+              <div class="form-field-group">
+                <label for="probDescription">Problem Description, Community Hazard & Potential Technical Direction <span class="required-star">*</span></label>
+                <textarea
+                  id="probDescription"
+                  name="description"
+                  rows="4"
+                  placeholder="1. Ground reality (e.g. froth overflowing onto roads, pungent odor, well water testing positive for heavy metals)&#10;2. Specific hazards to children, drinking supplies, or air quality&#10;3. What kind of engineering prototype (e.g. IoT telemetry buoy, drone flare map, low-cost bio-filter) could fix this?"
+                  required
+                  minlength="20"
+                ></textarea>
+                <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--colors-muted); margin-top: 4px;">
+                  <span>Provide enough technical context for student hackers.</span>
+                  <span id="descCharCount">0 / 20 min</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Action and submission banner -->
+            <div class="report-actions-row">
+              <button type="submit" id="submitProblemBtn" class="primary-btn submit-problem-btn">
+                <span>🚀 Submit Problem Report with Photographic Proof</span>
+              </button>
+              <div id="problemMessage" class="form-banner hidden" role="alert" aria-live="polite"></div>
+            </div>
+          </form>
+        </div>
       </section>
 
+      <!-- Contact Section -->
       <section id="contact" class="content-section">
         <div class="section-header">
           <div>
-            <p class="eyebrow">Get in touch</p>
-            <h2>Contact us</h2>
+            <span class="eyebrow">Get In Touch</span>
+            <h2>Collaborate with Us</h2>
           </div>
+          <span class="body-sm">Reach out for college partnerships, sponsorship, or mentoring</span>
         </div>
 
         <form id="contactForm" class="stack-form narrow-form" novalidate>
           <div class="field-grid">
             <label>
-              Name
-              <input type="text" name="name" placeholder="Your name" required />
+              Your Name
+              <input type="text" name="name" placeholder="Priya Sharma" required />
             </label>
             <label>
-              Email
-              <input type="email" name="email" placeholder="Your email" required />
+              Your Email
+              <input type="email" name="email" placeholder="priya@example.com" required />
             </label>
           </div>
 
           <label>
             Subject
-            <input type="text" name="subject" placeholder="Subject" />
+            <input type="text" name="subject" placeholder="College Hackathon Partnership" />
           </label>
 
           <label>
             Message
-            <textarea name="message" rows="5" placeholder="Write your message here" required></textarea>
+            <textarea name="message" rows="4" placeholder="How can we collaborate to advance social innovation?" required></textarea>
           </label>
 
-          <button type="submit" class="primary-btn">Send message</button>
-          <p id="contactMessage" class="form-message"></p>
+          <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
+            <button type="submit" class="primary-btn">Send Message</button>
+            <p id="contactMessage" class="form-message" aria-live="polite"></p>
+          </div>
         </form>
+      </section>
+
+      <!-- Admin Panel Section -->
+      <section id="adminReportsSection" class="content-section admin-panel hidden">
+        <div class="section-header">
+          <div>
+            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+              <img src="/assets/images/logo.png" alt="Admin Portal Logo" style="width: 26px; height: 26px; border-radius: 8px; border: 1px solid rgba(16, 185, 129, 0.3);" />
+              <span class="eyebrow" style="margin: 0;">Admin Access & Civic Governance</span>
+            </div>
+            <h2>Community Reports Management</h2>
+          </div>
+          <button id="exportCsvBtn" class="secondary-btn small" type="button">Export CSV</button>
+        </div>
+
+        <div id="adminSummary" class="dashboard-grid" style="margin-bottom: 24px;"></div>
+
+        <div class="report-toolbar">
+          <input id="reportSearch" type="search" placeholder="Search title, city, category..." aria-label="Search reports" />
+          <select id="reportCategory" aria-label="Filter by category">
+            <option value="All">All Categories</option>
+            <option>Environment</option>
+            <option>Waste Management</option>
+            <option>Water</option>
+            <option>Education</option>
+            <option>Healthcare</option>
+            <option>Transportation</option>
+            <option>Public Safety</option>
+            <option>Accessibility</option>
+            <option>Employment</option>
+            <option>Agriculture</option>
+            <option>Energy</option>
+            <option>Other</option>
+          </select>
+          <select id="reportStatus" aria-label="Filter by status">
+            <option value="All">All Status</option>
+            <option>Pending</option>
+            <option>Approved</option>
+            <option>Rejected</option>
+          </select>
+          <select id="reportUrgency" aria-label="Filter by urgency">
+            <option value="All">All Urgency</option>
+            <option>Low</option>
+            <option>Medium</option>
+            <option>High</option>
+            <option>Critical</option>
+          </select>
+          <button id="applyReportFilters" class="primary-btn small" type="button">Apply Filters</button>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Title</th>
+                <th>Category</th>
+                <th>City</th>
+                <th>Urgency</th>
+                <th>Status</th>
+                <th>Submitted</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="adminReportTableBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Pre-Footer Illustrated CTA Band (cta-band-illustrated) -->
+      <section class="cta-band-container">
+        <div class="cta-band-illustrated">
+          <div class="cta-band-content">
+            <span class="eyebrow">Ready for real impact?</span>
+            <h2>Turn your growth and eco ideas into reality today.</h2>
+            <p>
+              Join over 1,200 innovators, students, and citizens building tangible social and
+              environmental solutions for local neighborhoods.
+            </p>
+            <div class="cta-row" style="margin-bottom: 0;">
+              <button id="ctaRegisterBtn" class="primary-btn" type="button">Join the Next Hackathon</button>
+              <button id="ctaProblemBtn" class="secondary-btn" type="button">Report a Local Issue</button>
+            </div>
+          </div>
+          <div class="cta-mascot-wrap">
+            <img
+              src="/assets/images/mascot.jpg"
+              alt="Handcrafted 3D Claymation Eco Mascot Character holding solar leaf flag"
+              width="260"
+              height="260"
+              loading="eager"
+            />
+          </div>
+        </div>
       </section>
     </main>
 
+    <!-- Footer: Warm Cream (Surface-Soft #faf5e8), NOT Dark Navy, with Horizon 3D Clay Mountains -->
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <a href="#home" class="brand">
+              <div class="brand-logo-container">
+                <img src="/assets/images/logo.png" alt="Social Innovators Logo" class="brand-logo-img" />
+              </div>
+              <span>Social Innovators<span class="brand-dot">.</span></span>
+            </a>
+            <p>
+              The community-driven sustainability & environmental hackathon platform turning
+              grassroots challenges into measurable green impact.
+            </p>
+          </div>
+
+          <div class="footer-col">
+            <h4>Programs</h4>
+            <ul>
+              <li><a href="#hackathons">Green Hackathons</a></li>
+              <li><a href="#hackathons">Smart Water Labs</a></li>
+              <li><a href="#hackathons">Clean Energy Sprints</a></li>
+              <li><a href="#challenges">Community Challenges</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-col">
+            <h4>Platform</h4>
+            <ul>
+              <li><a href="#problemSection">Report an Issue</a></li>
+              <li><a href="#dashboard">Innovator Workspace</a></li>
+              <li><a href="#features">Squad Matcher</a></li>
+              <li><a href="#features">Impact Forecaster</a></li>
+            </ul>
+          </div>
+
+          <div class="footer-col">
+            <h4>Community</h4>
+            <ul>
+              <li><a href="#contact">Contact Support</a></li>
+              <li><a href="#loginModal" id="footerSignInLink">Sign In</a></li>
+              <li><a href="#registerModal" id="footerRegisterLink">Create Account</a></li>
+              <li><a href="https://github.com/sachin-saroj/Social-Innovators-Hub" target="_blank" rel="noopener">GitHub Project</a></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="footer-bottom">
+          <span>&copy; 2026 Social Innovators Hub. Handcrafted with Clay.com playful design system.</span>
+          <span>Building Sustainable Communities & Green Tech</span>
+        </div>
+      </div>
+
+      <!-- Clay Signature Horizon Mountains Illustration -->
+      <div class="footer-mountains-wrap">
+        <img
+          src="/assets/images/mountains.jpg"
+          alt="Clay.com Signature 3D Claymation Horizon Mountains Panorama"
+          width="1920"
+          height="180"
+          loading="eager"
+        />
+      </div>
+    </footer>
+
+    <!-- Login Modal -->
     <div id="loginModal" class="modal hidden" aria-hidden="true" role="dialog" aria-labelledby="loginTitle">
       <div class="modal-card">
         <button class="close-btn" type="button" data-close="loginModal" aria-label="Close login dialog">×</button>
         <div class="modal-header">
-          <div class="modal-badge-icon">🔐</div>
+          <div class="modal-brand-badge">
+            <img src="/assets/images/logo.png" alt="Social Innovators Logo" class="modal-logo-img" />
+          </div>
           <h3 id="loginTitle">Welcome Back</h3>
           <p class="modal-subtitle">Sign in to your Social Innovators Hub account</p>
         </div>
@@ -296,7 +807,7 @@
 
         <form id="loginForm" class="stack-form" novalidate>
           <div class="form-field-group">
-            <label for="loginEmail">Email address</label>
+            <label for="loginEmail">Email Address</label>
             <input
               id="loginEmail"
               type="email"
@@ -330,7 +841,7 @@
             <span class="field-error" id="loginPasswordError" aria-live="polite"></span>
           </div>
 
-          <button type="submit" id="loginSubmitBtn" class="primary-btn submit-btn">
+          <button type="submit" id="loginSubmitBtn" class="primary-btn submit-btn" style="width: 100%;">
             <span class="btn-text">Sign In</span>
             <span class="btn-spinner hidden" aria-hidden="true"></span>
           </button>
@@ -346,22 +857,25 @@
           <div class="demo-actions">
             <button type="button" id="demoAdminLoginBtn" class="demo-pill-btn admin-demo" title="Instant login as Demo Administrator">
               <span class="demo-tag">Admin</span>
-              <span>Continue as Demo Admin</span>
+              <span>Continue as Admin</span>
             </button>
             <button type="button" id="demoCitizenLoginBtn" class="demo-pill-btn citizen-demo" title="Instant login as Demo Citizen">
               <span class="demo-tag">Citizen</span>
-              <span>Continue as Demo Citizen</span>
+              <span>Continue as Citizen</span>
             </button>
           </div>
         </form>
       </div>
     </div>
 
+    <!-- Registration Modal -->
     <div id="registerModal" class="modal hidden" aria-hidden="true" role="dialog" aria-labelledby="registerTitle">
       <div class="modal-card modal-card-wide">
         <button class="close-btn" type="button" data-close="registerModal" aria-label="Close registration dialog">×</button>
         <div class="modal-header">
-          <div class="modal-badge-icon">🌱</div>
+          <div class="modal-brand-badge">
+            <img src="/assets/images/logo.png" alt="Social Innovators Logo" class="modal-logo-img" />
+          </div>
           <h3 id="registerTitle">Create Account</h3>
           <p class="modal-subtitle">Join the eco-innovation community to solve local sustainability challenges</p>
         </div>
@@ -371,7 +885,7 @@
         <form id="registerForm" class="stack-form" novalidate>
           <div class="field-grid">
             <div class="form-field-group">
-              <label for="regName">Full name</label>
+              <label for="regName">Full Name</label>
               <input
                 id="regName"
                 type="text"
@@ -386,7 +900,7 @@
             </div>
 
             <div class="form-field-group">
-              <label for="regPhone">Phone number <span class="optional-tag">(Optional)</span></label>
+              <label for="regPhone">Phone Number <span class="optional-tag">(Optional)</span></label>
               <input
                 id="regPhone"
                 type="tel"
@@ -401,7 +915,7 @@
 
           <div class="field-grid">
             <div class="form-field-group">
-              <label for="regEmail">Email address</label>
+              <label for="regEmail">Email Address</label>
               <input
                 id="regEmail"
                 type="email"
@@ -428,7 +942,7 @@
           </div>
 
           <div class="form-field-group">
-            <label for="regRole">Account type / role</label>
+            <label for="regRole">Account Type / Role</label>
             <select name="role" id="regRole" required>
               <option value="" disabled selected>Select your participation role</option>
               <option value="Student">Student (Hackathon Innovator & Solution Builder)</option>
@@ -472,7 +986,7 @@
           </div>
 
           <div class="form-field-group">
-            <label for="regConfirmPassword">Confirm password</label>
+            <label for="regConfirmPassword">Confirm Password</label>
             <div class="password-input-wrap">
               <input
                 id="regConfirmPassword"
@@ -495,7 +1009,7 @@
             <span class="field-error" id="regConfirmPasswordError" aria-live="polite"></span>
           </div>
 
-          <button type="submit" id="regSubmitBtn" class="primary-btn submit-btn">
+          <button type="submit" id="regSubmitBtn" class="primary-btn submit-btn" style="width: 100%;">
             <span class="btn-text">Create Account</span>
             <span class="btn-spinner hidden" aria-hidden="true"></span>
           </button>
@@ -507,69 +1021,107 @@
       </div>
     </div>
 
-    <section id="adminReportsSection" class="content-section admin-panel hidden">
-      <div class="section-header">
-        <div>
-          <p class="eyebrow">Admin access</p>
-          <h2>Reports management</h2>
+    <!-- Team Squad Registration Modal -->
+    <div id="teamRegisterModal" class="modal hidden" aria-hidden="true" role="dialog" aria-labelledby="teamModalTitle">
+      <div class="modal-card modal-card-wide">
+        <button class="close-btn" type="button" data-close="teamRegisterModal" aria-label="Close squad registration dialog">×</button>
+        <div class="modal-header">
+          <div class="modal-brand-badge">
+            <img src="/assets/images/logo.png" alt="Social Innovators Logo" class="modal-logo-img" />
+          </div>
+          <h3 id="teamModalTitle">Register Innovation Squad</h3>
+          <p class="modal-subtitle" id="teamModalSubtitle">Join the hackathon track and claim your verified challenge</p>
         </div>
-        <button id="exportCsvBtn" class="secondary-btn small" type="button">Export CSV</button>
+
+        <div id="teamRegisterMessage" class="form-banner hidden" role="alert" aria-live="polite"></div>
+
+        <form id="teamRegisterForm" class="stack-form" novalidate>
+          <input type="hidden" id="regHackathonId" name="hackathon_id" value="" />
+          
+          <div class="form-field-group">
+            <label for="regTeamName">Squad / Team Name</label>
+            <input
+              id="regTeamName"
+              type="text"
+              name="team_name"
+              placeholder="e.g. EcoLoop Circularity Crew"
+              required
+              minlength="2"
+              maxlength="60"
+            />
+            <span class="field-error" id="regTeamNameError" aria-live="polite"></span>
+          </div>
+
+          <div class="form-field-group">
+            <label for="regTeamChallenge">Target Environmental Challenge (Select Problem)</label>
+            <select name="challenge_id" id="regTeamChallenge" required>
+              <option value="" disabled selected>Loading verified civic challenges...</option>
+            </select>
+            <span class="field-error" id="regTeamChallengeError" aria-live="polite"></span>
+          </div>
+
+          <div class="form-field-group">
+            <label for="regTeamDesc">Planned Technical Approach / Solution Pitch</label>
+            <textarea
+              id="regTeamDesc"
+              name="description"
+              rows="3"
+              placeholder="Briefly describe your hardware/software architecture, sensor models, or community engagement strategy."
+            ></textarea>
+          </div>
+
+          <button type="submit" id="teamSubmitBtn" class="primary-btn submit-btn" style="width: 100%;">
+            <span class="btn-text">Confirm Squad Registration</span>
+          </button>
+        </form>
       </div>
+    </div>
 
-      <div id="adminSummary" class="dashboard-grid"></div>
+    <!-- Challenge Detail & Brief Modal -->
+    <div id="challengeDetailModal" class="modal hidden" aria-hidden="true" role="dialog" aria-labelledby="challengeModalTitle">
+      <div class="modal-card modal-card-wide">
+        <button class="close-btn" type="button" data-close="challengeDetailModal" aria-label="Close challenge brief">×</button>
+        <div class="modal-header" style="text-align: left;">
+          <div style="display: flex; gap: 8px; margin-bottom: 8px;" id="modalChallengePills">
+            <span class="category-badge" id="modalChallengeCategory">Water</span>
+            <span class="status-badge critical" id="modalChallengeUrgency">Critical Urgency</span>
+          </div>
+          <h3 id="challengeModalTitle" style="font-size: 1.5rem; line-height: 1.25;">Challenge Title</h3>
+          <p class="modal-subtitle" id="modalChallengeLocation" style="color: var(--colors-muted); font-size: 0.875rem;">Bengaluru • Ward 150</p>
+        </div>
 
-      <div class="report-toolbar">
-        <input id="reportSearch" type="search" placeholder="Search report, city, category..." aria-label="Search reports" />
-        <select id="reportCategory" aria-label="Filter by category">
-          <option value="All">All categories</option>
-          <option>Environment</option>
-          <option>Waste Management</option>
-          <option>Water</option>
-          <option>Education</option>
-          <option>Healthcare</option>
-          <option>Transportation</option>
-          <option>Public Safety</option>
-          <option>Accessibility</option>
-          <option>Employment</option>
-          <option>Agriculture</option>
-          <option>Energy</option>
-          <option>Other</option>
-        </select>
-        <select id="reportStatus" aria-label="Filter by status">
-          <option value="All">All status</option>
-          <option>Pending</option>
-          <option>Approved</option>
-          <option>Rejected</option>
-        </select>
-        <select id="reportUrgency" aria-label="Filter by urgency">
-          <option value="All">All urgency</option>
-          <option>Low</option>
-          <option>Medium</option>
-          <option>High</option>
-          <option>Critical</option>
-        </select>
-        <button id="applyReportFilters" class="primary-btn small" type="button">Apply filters</button>
+        <div style="display: flex; flex-direction: column; gap: 16px; margin-bottom: 24px;">
+          <!-- High-res Verified Photo Evidence Banner -->
+          <div id="modalEvidenceWrap" class="modal-evidence-banner hidden">
+            <img id="modalChallengeImg" src="" alt="Verified Photographic Ground Evidence" />
+            <div class="evidence-caption">📸 Verified Photographic Ground Evidence • Field Survey Confirmation</div>
+          </div>
+
+          <div style="background: var(--colors-surface-soft); padding: 14px 18px; border-radius: var(--rounded-md); border: 1px solid var(--colors-hairline);">
+            <strong style="display: block; font-size: 0.8125rem; text-transform: uppercase; color: var(--colors-muted); margin-bottom: 4px;">Citizens Impacted</strong>
+            <span id="modalChallengeAffected" style="font-size: 1.25rem; font-weight: 600; color: var(--colors-ink);">65,000 residents</span>
+          </div>
+
+          <div>
+            <strong style="display: block; font-size: 0.875rem; color: var(--colors-ink); margin-bottom: 6px;">Problem Statement & Ground Reality</strong>
+            <p id="modalChallengeDesc" style="font-size: 0.9375rem; color: var(--colors-body); line-height: 1.6;"></p>
+          </div>
+
+          <div style="background: rgba(34, 197, 94, 0.08); padding: 12px 16px; border-radius: var(--rounded-md); border: 1px solid rgba(34, 197, 94, 0.2);">
+            <strong style="display: block; font-size: 0.8125rem; color: #15803d; margin-bottom: 4px;">✓ Field Verification & Validator Note</strong>
+            <p id="modalChallengeFeedback" style="font-size: 0.875rem; color: #166534; margin: 0;"></p>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 12px; justify-content: flex-end; flex-wrap: wrap;">
+          <button type="button" class="secondary-btn" data-close="challengeDetailModal">Close Brief</button>
+          <button type="button" class="primary-btn" id="modalFormSquadBtn">Form a Squad to Solve This</button>
+        </div>
       </div>
+    </div>
 
-      <div class="table-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Title</th>
-              <th>Category</th>
-              <th>City</th>
-              <th>Urgency</th>
-              <th>Status</th>
-              <th>Submitted</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody id="adminReportTableBody"></tbody>
-        </table>
-      </div>
-    </section>
-
-    <div id="toast" class="toast"></div>
+    <!-- Toast Notification -->
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
     <script src="script.js"></script>
   </body>

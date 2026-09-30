@@ -1,112 +1,194 @@
-# 🌱 Social Innovators Hub — Environmental & Sustainability Hackathon Platform
+# 🌿 Social Innovators Hub
 
-**Social Innovators Hub** is a community-driven environmental hackathon and green innovation platform designed to transform real-world ecological and community challenges into actionable, high-impact solutions. It brings together students, eco-innovators, citizens, mentors, judges, and administrators to collaborate on sustainable technology, waste management, water conservation, renewable energy, and climate resilience.
+> **Grassroots Ecological Innovation & Civic Climate Hackathon Platform**  
+> *Transforming localized community environmental breakdowns into verified, measurable green solutions through engineering hackathons.*
 
----
-
-## 🌍 Platform Overview & Eco-Focus
-
-- **Environmental Problem Reporting:** Citizens and local communities report real ecological issues (waste accumulation, water scarcity, pollution hotspots, green cover loss).
-- **Green Hackathons:** Structured hackathons focused on Environmental Sustainability, Clean Tech, Smart Water, Renewable Energy, and Circular Economy.
-- **Student Team Collaboration:** Multi-disciplinary student teams register, form squads, and build prototype solutions targeted at verified community challenges.
-- **Mentorship & Judging:** Domain experts and sustainability judges provide feedback, evaluate feasibility, social & ecological impact, scalability, and sustainability.
-- **Impact Tracking & Admin Oversight:** Administrators review community reports, approve hackathon entries, track verified impact metrics, and export data.
+[![Node.js Version](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen.svg)](https://nodejs.org/)
+[![Database](https://img.shields.io/badge/database-SQLite%203-blue.svg)](https://www.sqlite.org/)
+[![Security Tests](https://img.shields.io/badge/tests-31%20passed-success.svg)](./test_auth.js)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](./package.json)
+[![UI Aesthetic](https://img.shields.io/badge/aesthetic-Clay.com%20Design%20System-orange.svg)](https://clay.com)
 
 ---
 
-## 🚀 Key Features
+## 📖 Overview
 
-- **Eco Challenge & Problem Submissions:** Citizens report local environmental problems with severity, location, and details.
-- **Admin Verification & Workflow:** Review, verify, prioritize, and approve community environmental challenges for upcoming hackathons.
-- **Hackathon Directory & Registration:** Browse live and upcoming environmental hackathons with schedules, team size rules, and guidelines.
-- **Student Team Portal & Project Submissions:** Submit project prototypes complete with problem statement, tech stack, environmental impact forecast, and demo links.
-- **Mentor & Judge Evaluation Dashboards:** Structured scoring rubrics evaluating innovation, environmental impact, technical feasibility, and sustainability.
-- **Instant Demo Access:** One-click shortcuts for Demo Admin, Citizen, Student, Mentor, and Judge roles.
-- **Admin Reports & Analytics:** Filter and search reports, track resolution statuses, and export CSV summaries.
-- **Persistent Local Database:** Backed by SQLite (`better-sqlite3`) with pre-seeded eco-hackathons, real-world problems, and demo profiles.
+**Social Innovators Hub** connects citizens documenting ground-level ecological crises (lake chemical foaming, burning landfill plumes, arsenic aquifers, industrial smog) directly with student engineering teams, hackathons, and municipal authorities.
+
+Built with a tactile, playful **Clay.com design system** (warm cream canvas `#fffaf0`, Plus Jakarta Sans typography, and handcrafted 3D claymation visual assets), the platform replaces abstract problem lists with verified photographic ground proof, structured challenge briefs, and measurable civic impact tracking.
+
+---
+
+## 🌟 Core Modules & Architecture
+
+### 1. Citizen Evidence Desk (4-Pillar Problem Reporting)
+- **Pillar 01 — Issue Identification & Priority:** Title input, environmental category selector (Water, Waste, Smog, Clean Energy, Stubble/Agriculture), and interactive radio cards for *Low*, *Medium*, *High*, and *Critical* urgency.
+- **Pillar 02 — Location & Impact Scope:** City, neighborhood/ward, and estimated citizens affected with **Quick Population Preset Chips** (`~500`, `~5,000`, `~25,000`, `~75,000+`).
+- **Pillar 03 — Ground Photographic Evidence:**
+  - Interactive **Drag & Drop Zone** + native device file picker.
+  - **Live Photo Preview Card** displaying filename, format/size, and "Change Photo" / "Remove" actions.
+  - **1-Click Sample Evidence Chips** (`Lake Toxic Froth`, `Landfill Methane Smoke`, `Arsenic Contaminated Well`, `Paddy Stubble Smoke`) for rapid demo testing.
+  - Strict client & server validation (max 5MB, JPG/PNG/WEBP/GIF MIME whitelist).
+- **Pillar 04 — Field Observation & Technical Guidance:** Guided context textarea with dynamic 20-character counter.
+
+### 2. Verified Civic Challenges Directory
+- Public-facing cards with **Verified Photographic Proof** thumbnails and `📸 Photo Evidence` badges.
+- **Challenge Brief Modal:** Inspect high-resolution field photos, citizen impact metrics, ground reality statements, and civic validator notes.
+- Direct **"Form a Squad to Solve This"** CTA pre-binding the problem to hackathon squad registration.
+
+### 3. Green Hackathons & Squad Registration
+- Hackathon directory with venue formats (Hybrid / In-Person), schedules, cash prizes, and registration deadlines.
+- Interactive squad registration modal mapping teams directly to active civic challenges.
+
+### 4. Innovator & Citizen Dashboard
+- Persona-specific workspaces (Student Innovator, Citizen Reporter, Platform Admin).
+- **"My Reported Issues" Tab:** Displays submitted problems with status pills (*Pending*, *Approved*, *Rejected*), municipal review notes, and photo thumbnails with full-resolution view links.
+- Real-time notification feed tracking incident review milestones.
+
+### 5. Municipal Governance & CSV Export
+- Admin review queue for reviewing, prioritizing, and approving/rejecting community reports.
+- **Dual-Route CSV Export** (`/api/admin/reports/export` & `/api/admin/reports/export.csv`) exporting filtered community reports with complete metadata, including **Photo Evidence URLs**.
+
+---
+
+## 🛡️ Security & Reliability Architecture
+
+- **Authentication:** JSON Web Tokens (JWT) signed with configurable expiration (`24h`).
+- **Password Hashing:** `bcryptjs` with salt rounds = 10; password hashes are strictly scrubbed from all API responses.
+- **Role-Based Access Control (RBAC):** Strict middleware protecting administrative and reporting endpoints (`requireAuth`, `requireRole('Admin')`).
+- **HTTP Security Headers:** Protected with `helmet` (`X-Frame-Options: SAMEORIGIN`, `X-Content-Type-Options: nosniff`, `X-DNS-Prefetch-Control`).
+- **Rate Limiting:** Auth endpoint rate-limiting via `express-rate-limit` (100 req / 15 min per IP).
+- **Zero Raw String SQL:** All database interactions use prepared statements in `better-sqlite3` to prevent SQL Injection.
+- **Safe Binary Storage:** Decodes base64 buffers directly with Node.js standard library `crypto` and `Buffer` without heavy third-party file dependencies; validates file signatures and limits payloads to 5MB.
 
 ---
 
 ## 🛠️ Tech Stack
 
-- **Frontend:** Semantic HTML5, Modern Responsive CSS3, Vanilla JavaScript (ES6+)
-- **Backend:** Node.js, Express.js
-- **Database:** SQLite with `better-sqlite3`
-- **Security & Auth:** JWT (JSON Web Tokens), bcryptjs password hashing, role-based access control (RBAC)
+| Layer | Technology |
+| :--- | :--- |
+| **Frontend** | Vanilla JavaScript (ES6+), Semantic HTML5, Custom CSS3 Design Tokens |
+| **Design System** | Clay.com Playful SaaS Aesthetic (`#fffaf0` Cream Canvas, Plus Jakarta Sans, 3D Claymation Assets) |
+| **Backend** | Node.js, Express.js |
+| **Database** | SQLite via `better-sqlite3` (Embedded, high performance, synchronous execution) |
+| **Security** | `jsonwebtoken`, `bcryptjs`, `helmet`, `express-rate-limit` |
+| **Testing** | Node.js native test runner (`test_auth.js` + `test_problem_upload.js`) |
 
 ---
 
-## 📁 Project Structure
+## 📁 Repository Structure
 
 ```
-├── index.html           # Main user interface & application views
-├── style.css            # Stylesheets, responsive layout & visual design
-├── script.js            # Frontend logic, API interactions & state management
-├── server.js            # Express API server & authentication endpoints
-├── database.js          # SQLite schema definitions & eco-seed dataset
-├── socialhub.db         # Persistent SQLite database (generated at runtime)
-├── .env.example         # Environment configuration template
-└── package.json         # Project metadata and dependencies
+├── assets/
+│   ├── images/
+│   │   ├── challenges/        # Verified photographic ground evidence assets
+│   │   ├── hero.jpg           # 3D claymation hero illustration
+│   │   ├── logo.jpg / .png    # Official 3D claymation brand logo
+│   │   ├── logo.svg           # Scalable vector logo emblem
+│   │   ├── mascot.jpg         # Claymation eco-innovator mascot
+│   │   └── mountains.jpg      # Clay horizon footer illustration
+│   └── logo.svg               # Root brand vector asset
+├── uploads/                   # Persistent user-uploaded evidence directory
+│   └── .gitkeep
+├── database.js                # SQLite schema migrations, tables & seeded challenge data
+├── index.html                 # Single Page Application UI & accessible modal dialogs
+├── package.json               # Dependencies, metadata & test scripts
+├── script.js                  # Frontend state management, API client & dropzone handlers
+├── server.js                  # Express REST API, auth routes & static file serving
+├── style.css                  # Clay.com design system tokens, components & animations
+├── test_auth.js               # 31-test security, RBAC & authentication verification suite
+├── test_problem_upload.js     # End-to-end image upload & database persistence test
+├── favicon.ico / favicon.svg  # Multi-resolution browser favicons
+└── .env.example               # Environment variable specification template
 ```
 
 ---
 
-## ⚡ Quick Start / Installation
+## ⚡ Getting Started
 
 ### 1. Prerequisites
-- Node.js (v18 or higher recommended)
-- npm
+- **Node.js** (v18.0.0 or higher)
+- **npm** (v9.0.0 or higher)
 
-### 2. Clone & Setup
+### 2. Installation
 ```bash
-git clone https://github.com/sachin-saroj/social-innovators-hub.git
-cd social-innovators-hub
-```
+# Clone the repository
+git clone https://github.com/sachin-saroj/Social-Innovators-Hub.git
+cd Social-Innovators-Hub
 
-### 3. Install Dependencies
-```bash
+# Install dependencies
 npm install
-```
 
-### 4. Configure Environment
-```bash
+# Configure environment variables
 cp .env.example .env
 ```
 
-### 5. Launch the Server
+### 3. Launch Development Server
 ```bash
+# Start server
 npm start
-# or for live reload during development:
+
+# Or with automatic reload on changes:
 npm run dev
 ```
 
-### 6. Open in Browser
-Visit **[http://localhost:3000](http://localhost:3000)** in your web browser.
+The application will be live at: **`http://localhost:3000`**
+
+---
+
+## 🧪 Running Automated Tests
+
+The test suite runs 31 automated authentication/security tests and complete photo upload integration tests:
+
+```bash
+npm test
+```
+
+### What `npm test` Validates:
+1. **Registration Security:** Duplicate emails (409), invalid formats (400), weak passwords (<8 chars), and privilege escalation prevention (cannot register as Admin or Judge).
+2. **Login & Enumeration Prevention:** Identical generic 401 error responses for non-existent emails vs. incorrect passwords.
+3. **Session Verification:** Token tampering detection and `/api/auth/me` profile resolution.
+4. **Role-Based Access Control (RBAC):** Citizens and Students blocked from Admin APIs (403 Forbidden).
+5. **Helmet Security Headers:** `X-Frame-Options`, `X-Content-Type-Options: nosniff`.
+6. **Ground Photo Upload & Database Storage:** Base64 upload decoding, file creation in `uploads/`, SQLite `image_url` row validation, and HTTP 200 static asset delivery.
 
 ---
 
 ## 👤 Demo Accounts
 
-| Role | Email | Password | Quick Shortcut |
+The platform includes pre-seeded demo accounts with one-click shortcuts on the login dialog:
+
+| Role | Email | Password | Shortcut |
 | :--- | :--- | :--- | :--- |
-| **Admin** | `admin@socialhub.com` | `admin123` | Click **"Continue as Demo Admin"** |
-| **Citizen** | `citizen@socialhub.com` | `citizen123` | Click **"Continue as Demo Citizen"** |
-| **Student** | `student@socialhub.com` | `student123` | Email / Password login |
-| **Community** | `community@socialhub.com` | `community123` | Email / Password login |
-| **Mentor** | `mentor@socialhub.com` | `mentor123` | Email / Password login |
-| **Judge** | `judge@socialhub.com` | `judge123` | Email / Password login |
+| **Platform Admin** | `admin@socialhub.com` | `admin123` | Click **"Continue as Demo Admin"** |
+| **Citizen Reporter** | `citizen@socialhub.com` | `citizen123` | Click **"Continue as Demo Citizen"** |
+| **Student Innovator** | `student@socialhub.com` | `student123` | Regular Sign In |
+| **Community Member** | `community@socialhub.com` | `community123` | Regular Sign In |
 
 ---
 
-## 🌿 Future Roadmap
+## 📡 REST API Reference
 
-- [ ] Automated carbon footprint & ecological impact estimation tools
-- [ ] Integration with municipal open data and environmental sensors
-- [ ] Leaderboard and automated certificates for winning green innovators
-- [ ] Direct file and media upload for on-ground environmental reports
-- [ ] Sponsor and green grant funding integration
+| Method | Endpoint | Access | Description |
+| :--- | :--- | :--- | :--- |
+| `POST` | `/api/auth/register` | Public | Register new Student or Citizen account |
+| `POST` | `/api/auth/login` | Public | Authenticate user and receive JWT |
+| `POST` | `/api/auth/demo-admin` | Public | Quick sign-in as municipal administrator |
+| `POST` | `/api/auth/demo-citizen` | Public | Quick sign-in as neighborhood citizen |
+| `GET` | `/api/auth/me` | Authenticated | Retrieve current user profile from token |
+| `POST` | `/api/auth/logout` | Authenticated | Terminate session and invalidate client state |
+| `GET` | `/api/problems` | Public | List approved environmental problems & photo evidence |
+| `POST` | `/api/problems` | Authenticated | Submit civic breakdown with base64 photo upload |
+| `GET` | `/api/hackathons` | Public | List active and upcoming sustainability hackathons |
+| `POST` | `/api/hackathons/:id/squad-register` | Authenticated | Register innovation squad mapped to challenge |
+| `GET` | `/api/dashboard/stats` | Public | Aggregated platform counter metrics |
+| `GET` | `/api/dashboard/my-activity` | Authenticated | User-specific registered hackathons, squads & reports |
+| `GET` | `/api/admin/reports` | Admin Only | Filtered community reports management queue |
+| `GET` | `/api/admin/reports/export` | Admin Only | Export community reports as structured CSV |
+| `PUT` | `/api/admin/reports/:id` | Admin Only | Update report status (`Approved` / `Rejected`) & feedback |
 
 ---
 
 ## 📄 License
-This project is licensed under the MIT License.
+
+This project is licensed under the [MIT License](./package.json).

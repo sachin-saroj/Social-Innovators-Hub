@@ -136,6 +136,35 @@ The application will be live at: **`http://localhost:3000`**
 
 ---
 
+## 🚀 Deployment on Render (Step-by-Step)
+
+This repository includes a [`render.yaml`](./render.yaml) blueprint and container host-binding for 100% automated deployment on [Render](https://render.com/).
+
+### Option 1: Automated Blueprint Deployment (1-Click)
+1. Go to [dashboard.render.com](https://dashboard.render.com/) and sign in with GitHub.
+2. Click the **"New +"** button in the top navigation and select **"Blueprint"**.
+3. Select your repository: `sachin-saroj/Social-Innovators-Hub`.
+4. Render will read `render.yaml`, automatically set up the web service, generate a cryptographically strong `JWT_SECRET`, and deploy.
+
+### Option 2: Standard Web Service Setup
+1. On [Render Dashboard](https://dashboard.render.com/), click **"New +"** -> **"Web Service"**.
+2. Connect your GitHub repository `https://github.com/sachin-saroj/Social-Innovators-Hub`.
+3. Fill in the following settings:
+   - **Name:** `social-innovators-hub` (or any custom name)
+   - **Environment:** `Node`
+   - **Branch:** `main`
+   - **Build Command:** `npm install`
+   - **Start Command:** `npm start`
+   - **Instance Type:** `Free`
+4. In the **Environment Variables** section, add:
+   - `NODE_ENV` = `production`
+   - `JWT_SECRET` = *(Enter any secret random string or click Generate)*
+   - `JWT_EXPIRES_IN` = `24h`
+5. Click **"Deploy Web Service"**.
+6. Once the build completes, Render will provide your public live URL (e.g., `https://social-innovators-hub.onrender.com`).
+
+---
+
 ## 🧪 Running Automated Tests
 
 The test suite runs 31 automated authentication/security tests and complete photo upload integration tests:

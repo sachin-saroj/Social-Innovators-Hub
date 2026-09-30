@@ -8,6 +8,9 @@
     "dev": "node --watch server.js",
     "test": "node test_auth.js && node test_problem_upload.js"
   },
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "keywords": [
     "environmental-hackathon",
     "sustainability",

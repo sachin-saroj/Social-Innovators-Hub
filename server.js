@@ -61,12 +61,14 @@ function saveBase64Image(dataString) {
 }
 
 const isProduction = process.env.NODE_ENV === 'production';
-const JWT_SECRET = process.env.JWT_SECRET || (isProduction ? null : 'social-innovators-demo-secret');
+let JWT_SECRET = process.env.JWT_SECRET;
 if (!JWT_SECRET) {
-  throw new Error('FATAL SECURITY CONFIGURATION: JWT_SECRET must be set in production environments.');
-}
-if (!process.env.JWT_SECRET && !isProduction) {
-  console.warn('⚠️ [DEV SECURITY NOTICE] JWT_SECRET is not configured in .env. Using fallback development secret for local college demo.');
+  if (isProduction) {
+    console.warn('⚠️ [SECURITY NOTICE] JWT_SECRET was not provided in production environment variables. Generating an ephemeral 256-bit runtime secret. To persist user sessions across server restarts, please set JWT_SECRET in your Render environment variables.');
+    JWT_SECRET = crypto.randomBytes(32).toString('hex');
+  } else {
+    JWT_SECRET = 'social-innovators-demo-secret';
+  }
 }
 
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || '24h';
@@ -1065,6 +1067,6 @@ app.get('*', (req, res) => {
   res.sendFile(__dirname + '/index.html');
 });
 
-app.listen(PORT, () => {
-  console.log(`Social Innovators Hub server is running on http://localhost:${PORT}`);
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`Social Innovators Hub server is running on port ${PORT}`);
 });
